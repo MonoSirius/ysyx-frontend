@@ -53,6 +53,7 @@ module.exports = {
 					'dists',
 					'mongodb',
 					'wildcard',
+					'pinia',
 				],
 				'skipIfMatch': [
 					'http://[^s]*',
@@ -61,12 +62,14 @@ module.exports = {
 					'\\.[cm]?js$',
 					'getters?',
 					'setters?',
-					'^std'
+					'^std',
+					'^[A-Z]+$'
 				],
 				'skipWordIfMatch': [
 					'ysyx',
 					'vhost',
-					'nodemailer'
+					'nodemailer',
+					'pathname'
 				],
 				'minLength': 5
 			}

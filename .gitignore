@@ -8,6 +8,7 @@ config.json
 # Package lock
 package-lock.json
 # Runtime generated data
+dist
 var
 tmp
 # to-do List
