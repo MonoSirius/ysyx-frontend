@@ -1,18 +1,19 @@
 <script setup>
-import Spinner from "@CC/Spinner.vue";
-import { useRoute } from "vue-router";
-import { router } from "@/router.js";
-import { onMounted, ref } from "vue";
+import ChasingCircle from '@CC/spinners/ChasingCircle.vue'
+import { useRoute } from 'vue-router'
+import { router } from '@/router.js'
+import { onMounted, ref } from 'vue'
 const route = useRoute(),
-	link = ref(null);
+	link = ref(null)
 onMounted(async () => {
-	if ("fulfilled" in route.query) {
-		router.go(-2);
-	} else {
-		router.push(route.path + '?fulfilled')
-		window.location.href = route.params.pathMatch.replace(/^\/to\//ig, '//')
-	}
-});
+	const state = window.history.state || {}
+	window.history.replaceState(
+		{ position: state?.position },
+		'',
+		state?.back || '/'
+	)
+	window.location.href = route.params.pathMatch.replace(/^\/to\//gi, '//')
+})
 </script>
 
 <template>
@@ -26,6 +27,6 @@ onMounted(async () => {
 			font-size: 100px;
 		"
 	>
-		<Spinner style="opacity: 0.3" />
+		<chasing-circle style="opacity: 0.3" />
 	</div>
 </template>

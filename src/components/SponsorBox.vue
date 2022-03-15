@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from 'vue'
 const props = defineProps({
 	alt: String,
 	scale: {
@@ -7,23 +7,21 @@ const props = defineProps({
 		default: 1,
 	},
 	el: Object,
-});
-const box = ref(null);
+})
+const box = ref(null)
 onMounted(() => {
-	console.log(props.alt, box.value.offsetTop);
-	document.addEventListener("scroll", () => {
-		if (window.innerWidth >= 720) return;
-		let	el = box.value,
+	document.addEventListener('scroll', () => {
+		if (window.innerWidth >= 720) return
+		let el = box.value,
 			elTop = el?.offsetTop || 0,
 			elHeight = el.offsetHeight,
-			mid = document.scrollingElement.scrollTop + (window.innerHeight >> 1);
+			mid =
+				document.scrollingElement.scrollTop + (window.innerHeight >> 1)
 		if (mid > elTop && mid < elTop + elHeight) {
-			el.focus();
-			console.log(props.alt)
+			el.focus()
 		}
-		// console.log(mid, elTop, elHeight)
-	});
-});
+	})
+})
 </script>
 
 <template>

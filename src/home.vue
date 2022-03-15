@@ -1,10 +1,10 @@
 <script setup>
-import Container from "@CC/Container.vue";
-import Footer from "@CC/Footer.vue";
-import Slogan from "./components/Slogan.vue";
-import Actions from "./components/Actions.vue";
-import Sponsors from "./components/Sponsors.vue";
-defineProps({scrollTop: Number})
+import Container from '@CC/Container.vue'
+import Footer from '@CC/Footer.vue'
+import Slogan from './components/Slogan.vue'
+import Actions from './components/Actions.vue'
+import Sponsors from './components/Sponsors.vue'
+defineProps({ scrollTop: Number })
 </script>
 
 <template>

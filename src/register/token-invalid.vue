@@ -1,11 +1,11 @@
 <script setup>
-import Container from "@CC/Container.vue";
-import Btn from "@CC/Button.vue";
-import { router } from "@/router.js";
-const emit = defineEmits(["next"]);
+import Container from '@CC/Container.vue'
+import Btn from '@CC/Button.vue'
+import { router } from '@/router.js'
+const emit = defineEmits(['next'])
 function goBack() {
-	router.replace({ path: "/register" });
-	emit("next");
+	router.replace({ path: '/register' })
+	emit('next')
 }
 </script>
 

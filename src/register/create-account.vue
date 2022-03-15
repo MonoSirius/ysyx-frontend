@@ -1,39 +1,49 @@
 <script setup>
-import Container from "@CC/Container.vue";
-import Btn from "@CC/Button.vue";
-import vForm from "@CC/Form.vue";
-import VueCountdown from "@chenfengyuan/vue-countdown";
-import { computed, ref, watch } from "vue";
-import { useRoute } from "vue-router";
-import { useRegisterStore } from "../register.vue";
-const inAction = ref(false),
-	coolDown = ref(false),
+import Container from '@CC/Container.vue'
+import Btn from '@CC/Button.vue'
+import vForm from '@CC/Form.vue'
+import VueCountdown from '@chenfengyuan/vue-countdown'
+import AlternatingDots from '@CC/spinners/AlternatingDots.vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useRegisterStore, callRegisterApi } from '../register.vue'
+const [PENDING, YES, NO] = [0, 1, 2],
+	inAction = ref(false),
 	errorMsg = ref(null),
-	confirmPwd = ref(""),
+	confirmPwd = ref(''),
+	eligible = ref(PENDING),
 	ready = computed(
 		() =>
-			store.userIDValid &&
+			eligible.value == YES &&
 			store.passwordValid &&
 			store.password == confirmPwd.value
 	),
 	buttonType = computed(() => {
-		if (inAction.value) return "gray";
-		if (store.passwordValid && !coolDown.value) return "green";
-		return "disabled";
+		if (inAction.value) return 'solid gray'
+		if (ready.value) return 'solid green'
+		return 'solid disabled'
 	}),
-	emit = defineEmits(["next"]),
-	store = useRegisterStore();
-function submit() {
-	if (state.value == STANDBY) {
-		state.value = IN_ACTION;
-		new Promise((res, rej) => {
-			setTimeout(() => {
-				emit("next");
-				res();
-			}, 1000);
-		}).then(() => 0);
+	emit = defineEmits(['next']),
+	store = useRegisterStore()
+async function submit() {
+	if (ready.value && !inAction.value) {
+		errorMsg.value = ''
+		inAction.value = true
+		if (await store.register((msg) => (errorMsg.value = msg))) {
+			emit('next')
+		} else {
+			inAction.value = false
+		}
 	}
 }
+// asynchronously check ID availability
+const check = async (userID = store.userID) => {
+	eligible.value = PENDING
+	const result = await store.checkUserID()
+	if (store.userID == userID) eligible.value = result ? YES : NO
+}
+watch(() => store.userID, check)
+check()
 </script>
 
 <template>
@@ -45,7 +55,14 @@ function submit() {
 		:pad="false"
 		:frame="true"
 	>
-		<h2>创建一生一芯账号</h2>
+		<h2>创建「一生一芯」账号</h2>
+		<Container
+			type="alert"
+			v-if="errorMsg"
+			style="width: 100%; max-width: 340px; margin: 1rem 0 0 0"
+		>
+			{{ errorMsg }}
+		</Container>
 		<v-form prompt>
 			<label for="email">Email</label>
 			<input
@@ -59,6 +76,16 @@ function submit() {
 				<span alert-text v-if="store.userID && !store.userIDValid"
 					>非法的用户名</span
 				>
+				<span
+					alert-text
+					v-else-if="store.userIDValid && eligible == NO"
+					>{{ store.checkResult }}</span
+				>
+				<alternating-dots
+					info-text
+					v-else-if="store.userIDValid && eligible == PENDING"
+				/>
+				<span success-text v-else-if="eligible == YES">该 ID 可用</span>
 			</label>
 			<input
 				type="text"
@@ -85,7 +112,11 @@ function submit() {
 			/>
 			<label for="confirm-password"
 				>确认密码
-				<span alert-text v-if="confirmPwd && store.password !== confirmPwd">两次输入的密码不一致</span>
+				<span
+					alert-text
+					v-if="confirmPwd && store.password !== confirmPwd"
+					>两次输入的密码不一致</span
+				>
 			</label>
 			<input
 				ref="confirmPassword"
@@ -96,14 +127,14 @@ function submit() {
 				:disabled="inAction"
 				@keydown.enter="submit"
 			/>
-			<btn
-				:type="
-					['solid', ['green', 'disabled', 'gray'][state]].join(' ')
-				"
-				@click="submit"
-			>
-				<span v-if="ready">注册</span>
-				<span v-else-if="inAction">正在为您创建账户 ...</span>
+			<btn :type="buttonType" @click="submit">
+				<span v-if="ready && !inAction">注册</span>
+				<span
+					v-else-if="inAction"
+					style="display: flex; align-items: center"
+					>正在为您创建账户
+					<alternating-dots style="margin-left: 0.5em"
+				/></span>
 				<span v-else>请填写有效的 ID 和密码</span>
 			</btn>
 		</v-form>

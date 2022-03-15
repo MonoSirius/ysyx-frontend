@@ -1,56 +1,46 @@
 <script setup>
-import Container from "@CC/Container.vue";
-import Spinner from "@CC/Spinner.vue";
-import SendMail from "./register/send-mail.vue";
-import MailSent from "./register/mail-sent.vue";
-import TokenInvalid from "./register/token-invalid.vue";
-import CreateAccount from "./register/create-account.vue";
-import Welcome from "./register/welcome.vue";
-import { markRaw, onActivated, onMounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
-import { router } from "@/router.js";
+import Container from '@CC/Container.vue'
+import ChasingCircle from '@CC/spinners/ChasingCircle.vue'
+import SendMail from './register/send-mail.vue'
+import MailSent from './register/mail-sent.vue'
+import TokenInvalid from './register/token-invalid.vue'
+import CreateAccount from './register/create-account.vue'
+import Welcome from './register/welcome.vue'
+import { markRaw, onActivated, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { router } from '@/router.js'
 const route = useRoute(),
 	loading = ref(true),
 	display = ref(null),
-	registerStore = useRegisterStore();
-let _next;
+	store = useRegisterStore()
+let _next
 function next(next = _next) {
 	if (next) {
-		display.value = markRaw(next);
-		if (next === SendMail) _next = MailSent;
-		else if (next === CreateAccount) _next = Welcome;
-		else if (next === TokenInvalid) _next = SendMail;
-		else _next = undefined;
+		display.value = markRaw(next)
+		if (next === SendMail) _next = MailSent
+		else if (next === CreateAccount) _next = Welcome
+		else if (next === TokenInvalid) _next = SendMail
+		else _next = undefined
 	} else {
-		router.push("/status/500");
+		router.push('/status/500')
 	}
-	loading.value = false;
+	loading.value = false
 }
-onMounted(async () => {
-	let { mail, token } = route.query;
-	if (mail || token) {
-		try {
-			mail = window.atob(mail);
-			registerStore.$patch({ mail, token });
-			await callRegisterApi({
-				action: "VALIDATE",
-				mail,
-				token,
-			}).then((res) => {
-				if (res.status === 200) {
-					next(CreateAccount);
-				} else {
-					throw new Error();
-				}
-			});
-		} catch (e) {
-			console.log(e);
-			next(TokenInvalid);
-		}
+onMounted(() => {
+	if (store.parseQuery(route)) {
+		store.validateToken().then((res) => {
+			if (res.status === 200) {
+				next(CreateAccount)
+			} else {
+				next(TokenInvalid)
+			}
+		})
+	} else if ('token' in route.query || 'mail' in route.query) {
+		next(TokenInvalid)
 	} else {
-		next(SendMail);
+		next(SendMail)
 	}
-});
+})
 </script>
 
 <template>
@@ -69,47 +59,161 @@ onMounted(async () => {
 				font-size: 100px;
 			"
 		>
-			<Spinner style="opacity: 0.3" />
+			<chasing-circle style="opacity: 0.3" />
 		</div>
 	</transition>
 </template>
 
 <script>
 // Api caller
-import createApi from "@CL/api.js";
-import { defineStore } from "pinia";
-export const callRegisterApi = createApi();
+import createApi from '@CL/api.js'
+import sha256 from '@CL/sha256.js'
+import Rx from '@CL/Rx.js'
+import { defineStore } from 'pinia'
+export const callRegisterApi = createApi({ url: '/register' })
+// Cached result list for validated ID list
+const checkedIdList = {}
 // Pinia Store
-export const useRegisterStore = defineStore("register", {
+export const useRegisterStore = defineStore('register', {
 	state() {
 		return {
 			// Step 1: Validate Email
-			mail: "",
+			mail: '',
 			allowAd: false,
 			// Step 2: Create Account
-			userID: "",
-			password: "",
-		};
+			userID: '',
+			password: '',
+			checkResult: '',
+		}
 	},
 	getters: {
 		/**
 		 * @returns {Boolean}
 		 */
 		mailValid(store) {
-			return /^\w+(\w+|\.|-)*\w+@([\w\-_]+\.)+[a-zA-Z]{1,3}$/i.test(
-				store.mail
-			);
+			return Rx.mail.test(store.mail)
 		},
+		/**
+		 * @returns {Boolean}
+		 */
 		userIDValid(store) {
-			return /^[a-z][a-z0-9\-_]{4,15}$/gi.test(
-				store.userID
-			);
+			return Rx.ID.test(store.userID)
 		},
+		/**
+		 * @returns {Boolean}
+		 */
 		passwordValid(store) {
-			return store.password && store.password.length >= 5;
+			return store.password && store.password.length >= 5
 		},
 	},
-});
+	actions: {
+		/**
+		 * @param {import('vue-router').RouteLocationNormalized} route
+		 * @returns {Boolean} Indicates whether the search query is valid
+		 */
+		parseQuery(route) {
+			let { mail, token } = route?.query || {}
+			// Check if both mail and token are valid strings
+			if (
+				![mail, token]
+					.map((_) => _ && typeof _ === 'string')
+					.reduce((a, b) => a && b)
+			)
+				return false
+			try {
+				mail = window.atob(mail)
+				this.mail = mail
+				this.token = token
+				return true
+			} catch (e) {
+				this.$reset()
+				return false
+			}
+		},
+		/**
+		 * @returns {Promise<Response>}
+		 */
+		async sendMail() {
+			const { mail, allowAd } = this
+			return await callRegisterApi({
+				action: 'SEND_MAIL',
+				mail,
+				allowAd,
+			})
+		},
+		/**
+		 * @returns {Promise<Response>}
+		 */
+		async validateToken() {
+			const { mail, token } = this
+			return await callRegisterApi({
+				action: 'VALIDATE',
+				mail,
+				token,
+			})
+		},
+		/**
+		 * @returns {Promise<Response>}
+		 */
+		async checkUserID() {
+			const { mail, token, userID } = this
+			if (!this.userIDValid) return false
+			if (!(userID in checkedIdList)) {
+				// Store a promise in corresponding cache list entry
+				checkedIdList[userID] = callRegisterApi({
+					action: 'VALIDATE',
+					mail,
+					token,
+					userID,
+				}).then(async (res) => {
+					if (res.ok) {
+						return true
+					} else {
+						this.checkResult = await res.text()
+						return false
+					}
+				})
+			}
+			return await checkedIdList[userID]
+		},
+		/**
+		 * @returns {Promise<Boolean>}
+		 */
+		async register(onFail = () => {}) {
+			const { mail, token, userID, password } = this
+			const registerResult = await callRegisterApi({
+				action: 'CREATE_ACCOUNT',
+				mail,
+				token,
+				userID,
+				password: sha256(password),
+			}).then(async (res) => {
+				if (res.ok) {
+					return true
+				} else {
+					onFail(await res.text())
+					return false
+				}
+			})
+			if (!registerResult) return false
+			let loginSuccessful = false,
+				retryCount = 3
+			while (!loginSuccessful && retryCount) {
+				loginSuccessful = await new Promise((resolve, reject) => {
+					setTimeout(() => {
+						resolve(true)
+					}, 1000)
+				})
+				// loginSuccessful = await login();
+				retryCount -= 1
+			}
+			if (!loginSuccessful) {
+				onFail('[X] Failed to login to your new account')
+			}
+			return loginSuccessful
+		},
+	},
+})
 </script>
 
 <style lang="scss" scoped>

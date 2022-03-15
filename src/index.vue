@@ -1,19 +1,19 @@
 <script setup>
-import Header from "@CC/Header.vue";
-import AppBody from "@CC/Body.vue";
+import Header from '@CC/Header.vue'
+import AppBody from '@CC/Body.vue'
 // Loading animation params
-import { ref } from "vue";
-const loading = ref(false);
+import { ref } from 'vue'
+const loading = ref(false)
 // Router loading animation
-import { router } from "../router.js";
+import { router } from '../router.js'
 router.beforeEach((to, from, next) => {
-	loading.value = true;
-	next();
-});
+	loading.value = true
+	next()
+})
 router.beforeResolve((to, from, next) => {
-	loading.value = false;
-	next();
-});
+	loading.value = false
+	next()
+})
 </script>
 
 <template>

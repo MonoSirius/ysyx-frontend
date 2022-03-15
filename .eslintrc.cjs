@@ -63,7 +63,8 @@ module.exports = {
 					'getters?',
 					'setters?',
 					'^std',
-					'^[A-Z]+$'
+					'^[A-Z]+$',
+					'no-\\w+'
 				],
 				'skipWordIfMatch': [
 					'ysyx',

@@ -1,44 +1,41 @@
 <script setup>
-import Container from "@CC/Container.vue";
-import Btn from "@CC/Button.vue";
-import vForm from "@CC/Form.vue";
-import VueCountdown from "@chenfengyuan/vue-countdown";
-import { computed, ref, watch } from "vue";
-import { useRoute } from "vue-router";
-import { callRegisterApi, useRegisterStore } from "../register.vue";
+import Container from '@CC/Container.vue'
+import Btn from '@CC/Button.vue'
+import vForm from '@CC/Form.vue'
+import VueCountdown from '@chenfengyuan/vue-countdown'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { callRegisterApi, useRegisterStore } from '../register.vue'
 const inAction = ref(false),
 	coolDown = ref(false),
 	errorMsg = ref(null),
 	buttonType = computed(() => {
-		if (inAction.value) return "gray";
-		if (store.mailValid && !coolDown.value) return "green";
-		return "disabled";
+		if (inAction.value) return 'gray'
+		if (store.mailValid && !coolDown.value) return 'green'
+		return 'disabled'
 	}),
-	emit = defineEmits(["next"]),
-	store = useRegisterStore();
+	emit = defineEmits(['next']),
+	store = useRegisterStore()
 function submit() {
 	if (store.mailValid) {
-		inAction.value = true;
-		errorMsg.value = null;
-		let mail, allowAd;
-		callRegisterApi({
-			action: "SEND_MAIL",
-			...({ mail, allowAd } = store),
-		})
+		inAction.value = true
+		errorMsg.value = null
+		store
+			.sendMail()
 			.then(async (res) => {
 				switch (res.status) {
 					case 200:
-						emit("next");
+						emit('next')
 					default:
-						errorMsg.value = await res.text();
-						coolDown.value = res.status >= 500;
+						errorMsg.value = await res.text()
+						coolDown.value = res.status >= 500
 				}
 			})
 			.catch(() => {
-				errorMsg.value = "请求失败, 请稍后重试";
-				coolDown.value = true;
+				errorMsg.value = '请求失败, 请稍后重试'
+				coolDown.value = true
 			})
-			.then(() => (inAction.value = false));
+			.then(() => (inAction.value = false))
 	}
 }
 </script>
