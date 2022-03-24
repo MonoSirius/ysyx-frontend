@@ -6,6 +6,7 @@ import AlternatingDots from '@CC/spinners/AlternatingDots.vue'
 import { onActivated, ref, watch } from 'vue'
 import useUserStore from '@CS/user'
 import { router } from '@/router'
+import { useRoute } from 'vue-router'
 const [STANDBY, INCOMPLETE, IN_ACTION] = [0, 1, 2],
 	state = ref(INCOMPLETE),
 	errorMsg = ref(''),
@@ -44,16 +45,13 @@ async function loginAction(onIncomplete = () => {}) {
 	if (state.value == STANDBY) {
 		state.value = IN_ACTION
 		// Parse location.search arguments
-		errorMsg.value = false
+		errorMsg.value = ''
 		const successful = await user.login(
 			login.value,
 			password.value,
 			(msg) => errorMsg.value = msg
 		)
-		if (successful) {
-			const path = `/user/${user.userID}/`
-			router.push(router.resolve(path))
-		} else {
+		if (!successful && !errorMsg.value) {
 			errorMsg.value = '登录失败: 您填写的信息有误'
 			state.value = INCOMPLETE
 		}
@@ -61,6 +59,12 @@ async function loginAction(onIncomplete = () => {}) {
 		onIncomplete()
 	}
 }
+// Redirect upon successful login
+const onLogin = () => router.push(router.resolve(`/user/${user.userID}/`))
+watch(() => user.loginState, state => {
+	if (state) onLogin()
+})
+if (user.loginState) onLogin()
 </script>
 
 <template>

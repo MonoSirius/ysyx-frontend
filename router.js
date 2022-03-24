@@ -20,6 +20,10 @@ export const routes = [{
 	meta: { title: '用户注册 | 一生一芯计划' },
 	component: () => import('./src/register.vue')
 }, {
+	path: '/user/:userID/',
+	meta: { title: '用户详情 | 一生一芯计划' },
+	component: () => import('./src/register.vue')
+}, {
 	path: '/redirect:pathMatch(.*)',
 	// meta: { title: 'Redirect' },
 	component: () => import('./src/redirect.vue')

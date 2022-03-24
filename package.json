@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --outDir var/dist",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -17,7 +17,7 @@
     "vite": "^2.8.0",
     "vite-plugin-pwa": "^0.11.13",
     "vue": "^3.2.25",
-    "vue-router": "^4.0.12",
-    "common": "git+ssh://git@github.com/ysyx-org/frontend-common"
+    "vue-avatar": "^2.3.3",
+    "vue-router": "^4.0.12"
   }
 }
