@@ -9,7 +9,7 @@ const registerStore = useRegisterStore(),
 </script>
 
 <template>
-	<Container
+	<container
 		flex
 		flex-column
 		flex-center
@@ -18,7 +18,7 @@ const registerStore = useRegisterStore(),
 		:frame="true"
 	>
 		<h2>邮件已发送</h2>
-		<Container
+		<container
 			type="info"
 			class="green"
 			style="width: 100%; max-width: 340px; margin: 1rem 0 0 0"
@@ -30,15 +30,15 @@ const registerStore = useRegisterStore(),
 				请按照邮件内的说明完成后续注册步骤。
 			</p>
 			<p>如果没有收到邮件, 请检查您邮箱的拦截记录。</p>
-		</Container>
-		<Container
+		</container>
+		<container
 			type="message"
 			style="width: 100%; max-width: 340px; margin: 1rem 0"
 		>
 			如果在注册阶段反复遇到问题, 您可以联系
 			<btn type="link" href="mailto:support@ysyx.org">技术支持</btn>
-		</Container>
-		<Btn
+		</container>
+		<btn
 			:type="['solid', coolDown ? 'disabled' : 'gray'].join(' ')"
 			:to="coolDown ? undefined : '/redirect/register'"
 			>重新发送<vue-countdown
@@ -48,6 +48,6 @@ const registerStore = useRegisterStore(),
 				v-slot="{ totalSeconds }"
 				>({{ totalSeconds }}s)</vue-countdown
 			>
-		</Btn>
-	</Container>
+		</btn>
+	</container>
 </template>

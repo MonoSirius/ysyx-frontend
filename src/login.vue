@@ -2,27 +2,28 @@
 import Container from '@CC/Container.vue'
 import Btn from '@CC/Button.vue'
 import vForm from '@CC/Form.vue'
+import AlternatingDots from '@CC/spinners/AlternatingDots.vue'
 import { onActivated, ref, watch } from 'vue'
-import sha256 from '@CL/sha256.js'
-import useUserStore from '@CL/store/user'
+import useUserStore from '@CS/user'
+import { router } from '@/router'
 const [STANDBY, INCOMPLETE, IN_ACTION] = [0, 1, 2],
 	state = ref(INCOMPLETE),
+	errorMsg = ref(''),
 	login = ref(''),
 	loginValid = ref(false),
 	password = ref(''),
 	passwordValid = ref(false),
-	loginAttemptFailed = ref(false),
-	store = useUserStore()
+	user = useUserStore()
 watch(login, (str) => {
 	loginValid.value = str.length >= 5
 	if (state.value == STANDBY) {
-		loginAttemptFailed.value = false
+		errorMsg.value = ''
 	}
 })
 watch(password, (str) => {
 	passwordValid.value = str.length >= 5
 	if (state.value == STANDBY) {
-		loginAttemptFailed.value = false
+		errorMsg.value = ''
 	}
 })
 watch(loginValid, (bool) => {
@@ -39,47 +40,39 @@ function changeState({
 		state.value = _login && _password ? STANDBY : INCOMPLETE
 	}
 }
-function loginAction() {
+async function loginAction(onIncomplete = () => {}) {
 	if (state.value == STANDBY) {
 		state.value = IN_ACTION
 		// Parse location.search arguments
-		new Promise(async (res, rej) => {
-			loginAttemptFailed.value = false
-			await fetch('/login', {
-				method: 'POST',
-				body: JSON.stringify({
-					login: login.value,
-					password: sha256(password.value),
-					args,
-				}),
-				redirect: 'follow',
-			}).then(
-				(res) => {
-					console.log(res.status)
-				},
-				(rej) => {
-					console.log(rej)
-				}
-			)
-			setTimeout(() => {
-				loginAttemptFailed.value = true
-				res()
-			}, 1000)
-		}).then(() => (state.value = STANDBY))
+		errorMsg.value = false
+		const successful = await user.login(
+			login.value,
+			password.value,
+			(msg) => errorMsg.value = msg
+		)
+		if (successful) {
+			const path = `/user/${user.userID}/`
+			router.push(router.resolve(path))
+		} else {
+			errorMsg.value = '登录失败: 您填写的信息有误'
+			state.value = INCOMPLETE
+		}
+	} else {
+		onIncomplete()
 	}
 }
 </script>
 
 <template>
-	<Container flex flex-column flex-center flex-grow :pad="false">
+	<container flex flex-column flex-center flex-grow :pad="false">
 		<h2>登录「一生一芯」账号</h2>
-		<Container
+		<container
 			type="alert"
 			style="width: 100%; max-width: 340px; margin: 1rem 0 0 0"
-			v-if="loginAttemptFailed"
+			v-if="errorMsg"
 		>
-			登录失败: 您填写的信息有误
-		</Container>
+			{{ errorMsg }}
+		</container>
 		<v-form prompt>
 			<label for="login">ID / Email</label>
 			<input
@@ -88,10 +81,8 @@ function loginAction() {
 				autocomplete="username"
 				v-model.trim="login"
 				:disabled="state === IN_ACTION"
-				@keydown.enter="
-					if (state == STANDBY) loginAction();
-					else $refs.pwd.focus();
-				"
+				@keydown.enter="loginAction(() => $refs.passwordInput.focus())"
+				ref="loginInput"
 			/>
 			<label for="password">密码</label>
 			<input
@@ -100,8 +91,8 @@ function loginAction() {
 				autocomplete="current-password"
 				v-model.trim="password"
 				:disabled="state === IN_ACTION"
-				@keydown.enter="loginAction()"
-				ref="pwd"
+				@keydown.enter="loginAction(() => $refs.loginInput.focus())"
+				ref="passwordInput"
 			/>
 			<btn
 				:type="
@@ -110,9 +101,11 @@ function loginAction() {
 				@click="loginAction"
 			>
 				<span v-if="state == STANDBY">登录</span>
-				<span v-else-if="state == IN_ACTION">登录中 ...</span>
+				<span v-else-if="state == IN_ACTION">
+					<alternating-dots />
+				</span>
 				<span v-else>请填写有效的用户名和密码</span>
 			</btn>
 		</v-form>
-	</Container>
+	</container>
 </template>

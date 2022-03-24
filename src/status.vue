@@ -13,7 +13,7 @@ const LUT = {
 </script>
 
 <template>
-	<Container
+	<container
 		style="
 			display: flex;
 			flex-grow: 1;
@@ -39,13 +39,13 @@ const LUT = {
 				>
 			</span>
 		</div>
-	</Container>
+	</container>
 </template>
 
 <style scoped>
 * {
 	display: block;
-	color: var(--ct-gray);
+	color: var(--ct-gray-light);
 }
 h1 {
 	font-size: 8rem;

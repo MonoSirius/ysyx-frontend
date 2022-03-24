@@ -12,6 +12,7 @@ export default defineConfig({
 			'@C': path.resolve(__dirname, './common'),
 			'@CR': path.resolve(__dirname, './common/res'),
 			'@CL': path.resolve(__dirname, './common/lib'),
+			'@CS': path.resolve(__dirname, './common/store'),
 			'@CC': path.resolve(__dirname, './common/components'),
 		},
 	},

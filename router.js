@@ -12,6 +12,10 @@ export const routes = [{
 	meta: { title: '用户登录 | 一生一芯计划' },
 	component: () => import('./src/login.vue')
 }, {
+	path: '/logout',
+	meta: { title: '退出登录 | 一生一芯计划' },
+	component: () => import('./src/logout.vue')
+}, {
 	path: '/register',
 	meta: { title: '用户注册 | 一生一芯计划' },
 	component: () => import('./src/register.vue')

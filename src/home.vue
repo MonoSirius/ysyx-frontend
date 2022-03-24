@@ -8,7 +8,7 @@ defineProps({ scrollTop: Number })
 </script>
 
 <template>
-	<Container
+	<container
 		style="
 			display: flex;
 			flex-direction: column;
@@ -18,9 +18,9 @@ defineProps({ scrollTop: Number })
 	>
 		<Slogan />
 		<Actions />
-	</Container>
-	<Container title="合作/赞助机构" :next-level="true">
+	</container>
+	<container title="合作/赞助机构" :next-level="true">
 		<Sponsors :scrollTop="scrollTop" />
-	</Container>
+	</container>
 	<Footer />
 </template>

@@ -3,6 +3,7 @@ import Container from '@CC/Container.vue'
 import Btn from '@CC/Button.vue'
 import vForm from '@CC/Form.vue'
 import VueCountdown from '@chenfengyuan/vue-countdown'
+import AlternatingDots from '@CC/spinners/AlternatingDots.vue'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { callRegisterApi, useRegisterStore } from '../register.vue'
@@ -10,8 +11,11 @@ const inAction = ref(false),
 	coolDown = ref(false),
 	errorMsg = ref(null),
 	buttonType = computed(() => {
-		if (inAction.value) return 'gray'
-		if (store.mailValid && !coolDown.value) return 'green'
+		if (
+			store.mailValid &&
+			!coolDown.value &&
+			!inAction.value
+		) return 'green'
 		return 'disabled'
 	}),
 	emit = defineEmits(['next']),
@@ -41,7 +45,7 @@ function submit() {
 </script>
 
 <template>
-	<Container
+	<container
 		flex
 		flex-column
 		flex-center
@@ -50,19 +54,19 @@ function submit() {
 		:frame="true"
 	>
 		<h2>请填写您的邮箱</h2>
-		<Container
+		<container
 			type="message"
 			style="width: 100%; max-width: 340px; margin: 1rem 0 0 0"
 		>
 			您提供的邮箱是我们与您联系的主要途径, 建议填写最常用的邮箱
-		</Container>
-		<Container
+		</container>
+		<container
 			type="alert"
 			v-if="errorMsg"
 			style="width: 100%; max-width: 340px; margin: 1rem 0 0 0"
 		>
 			{{ errorMsg }}
-		</Container>
+		</container>
 		<v-form prompt>
 			<label for="email">Email</label>
 			<input
@@ -93,7 +97,7 @@ function submit() {
 			</span>
 			<btn :type="['solid', buttonType].join(' ')" @click="submit">
 				<span v-if="store.mailValid && !inAction">发送验证邮件</span>
-				<span v-else-if="inAction">正在发送 ...</span>
+				<alternating-dots v-else-if="inAction" />
 				<vue-countdown
 					v-else-if="coolDown"
 					:time="60000"
@@ -104,5 +108,5 @@ function submit() {
 				<span v-else>请填写有效的邮箱地址</span>
 			</btn>
 		</v-form>
-	</Container>
+	</container>
 </template>

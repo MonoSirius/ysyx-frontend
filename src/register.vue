@@ -8,7 +8,7 @@ import CreateAccount from './register/create-account.vue'
 import Welcome from './register/welcome.vue'
 import { markRaw, onActivated, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { router } from '@/router.js'
+import { router } from '@/router'
 const route = useRoute(),
 	loading = ref(true),
 	display = ref(null),
@@ -66,13 +66,14 @@ onMounted(() => {
 
 <script>
 // Api caller
-import createApi from '@CL/api.js'
-import sha256 from '@CL/sha256.js'
-import Rx from '@CL/Rx.js'
+import createApi from '@CL/api'
+import sha256 from '@CL/sha256'
+import Rx from '@CL/Rx'
 import { defineStore } from 'pinia'
+import useUserStore from '@CS/user'
 export const callRegisterApi = createApi({ url: '/register' })
 // Cached result list for validated ID list
-const checkedIdList = {}
+const checkedIdList = {}, user = useUserStore()
 // Pinia Store
 export const useRegisterStore = defineStore('register', {
 	state() {
@@ -82,6 +83,7 @@ export const useRegisterStore = defineStore('register', {
 			allowAd: false,
 			// Step 2: Create Account
 			userID: '',
+			userName: '',
 			password: '',
 			checkResult: '',
 		}
@@ -180,12 +182,13 @@ export const useRegisterStore = defineStore('register', {
 		 * @returns {Promise<Boolean>}
 		 */
 		async register(onFail = () => {}) {
-			const { mail, token, userID, password } = this
+			const { mail, token, userID, password, userName } = this
 			const registerResult = await callRegisterApi({
 				action: 'CREATE_ACCOUNT',
 				mail,
 				token,
 				userID,
+				name: userName,
 				password: sha256(password),
 			}).then(async (res) => {
 				if (res.ok) {
@@ -199,11 +202,7 @@ export const useRegisterStore = defineStore('register', {
 			let loginSuccessful = false,
 				retryCount = 3
 			while (!loginSuccessful && retryCount) {
-				loginSuccessful = await new Promise((resolve, reject) => {
-					setTimeout(() => {
-						resolve(true)
-					}, 1000)
-				})
+				loginSuccessful = await user.login(userID, password, onFail)
 				// loginSuccessful = await login();
 				retryCount -= 1
 			}

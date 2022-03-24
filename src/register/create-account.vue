@@ -47,7 +47,7 @@ check()
 </script>
 
 <template>
-	<Container
+	<container
 		flex
 		flex-column
 		flex-center
@@ -56,13 +56,13 @@ check()
 		:frame="true"
 	>
 		<h2>创建「一生一芯」账号</h2>
-		<Container
+		<container
 			type="alert"
 			v-if="errorMsg"
 			style="width: 100%; max-width: 340px; margin: 1rem 0 0 0"
 		>
 			{{ errorMsg }}
-		</Container>
+		</container>
 		<v-form prompt>
 			<label for="email">Email</label>
 			<input
@@ -92,6 +92,16 @@ check()
 				name="userID"
 				autocomplete="username"
 				v-model.trim="store.userID"
+				:disabled="inAction"
+				@keydown.enter="$refs.userName.focus()"
+			/>
+			<label for="userName">姓名 (可选)</label>
+			<input
+				type="text"
+				ref="userName"
+				name="userName"
+				autocomplete="name"
+				v-model.trim="store.userName"
 				:disabled="inAction"
 				@keydown.enter="$refs.password.focus()"
 			/>
@@ -132,11 +142,11 @@ check()
 				<span
 					v-else-if="inAction"
 					style="display: flex; align-items: center"
-					>正在为您创建账户
-					<alternating-dots style="margin-left: 0.5em"
-				/></span>
+				>
+					<alternating-dots />
+				</span>
 				<span v-else>请填写有效的 ID 和密码</span>
 			</btn>
 		</v-form>
-	</Container>
+	</container>
 </template>
