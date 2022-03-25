@@ -1,6 +1,7 @@
 <script setup>
 import Header from '@CC/Header.vue'
 import AppBody from '@CC/Body.vue'
+import WinStack from '@CC/WinStack.vue'
 import useUserStore from '@CS/user'
 import { router } from '../router'
 // Loading animation params
@@ -24,6 +25,7 @@ router.beforeResolve((to, from, next) => {
 
 <template>
 	<Header :loading="loading" />
+	<WinStack />
 	<AppBody>
 		<router-view></router-view>
 	</AppBody>

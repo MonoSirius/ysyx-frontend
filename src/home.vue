@@ -4,7 +4,6 @@ import Footer from '@CC/Footer.vue'
 import Slogan from './components/Slogan.vue'
 import Actions from './components/Actions.vue'
 import Sponsors from './components/Sponsors.vue'
-defineProps({ scrollTop: Number })
 </script>
 
 <template>
@@ -20,7 +19,7 @@ defineProps({ scrollTop: Number })
 		<Actions />
 	</container>
 	<container w1280 title="合作/赞助机构" :next-level="true">
-		<Sponsors :scrollTop="scrollTop" />
+		<Sponsors />
 	</container>
 	<Footer />
 </template>

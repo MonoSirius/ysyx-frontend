@@ -5,8 +5,14 @@ import Avatar from '@CC/Avatar.vue'
 import Container from '@CC/Container.vue'
 import btn from '@CC/Button.vue'
 import vForm from '@CC/Form.vue'
+import { confirm, prompt } from '@CC/WinStack.vue'
 import useUserStore from '@CS/user'
 const user = useUserStore()
+// WindowStack call
+async function removeAvatar() {
+	if (await confirm('确认移除您的头像?'))
+		prompt('删除成功', '您的头像已经移除')
+}
 </script>
 
 <template>
@@ -43,7 +49,7 @@ const user = useUserStore()
 						<btn type="solid brand" style="margin: 10px"
 							>更改头像</btn
 						>
-						<btn type="solid red" style="margin: 10px"
+						<btn type="solid red" style="margin: 10px" @click="removeAvatar"
 							>移除头像</btn
 						>
 					</container>
@@ -73,7 +79,6 @@ const user = useUserStore()
 				<label>语言</label>
 				<select style="max-width: 300px" disabled>
 					<option value="all">中文 - 简体</option>
-					>
 				</select>
 				<label>推送通知</label>
 				<select style="max-width: 300px">

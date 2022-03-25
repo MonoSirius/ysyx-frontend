@@ -132,7 +132,7 @@ check()
 				ref="confirmPassword"
 				type="password"
 				name="confirm-password"
-				autocomplete="confirm-password"
+				autocomplete="new-password"
 				v-model.trim="confirmPwd"
 				:disabled="inAction"
 				@keydown.enter="submit"
