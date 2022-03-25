@@ -10,18 +10,18 @@ const props = defineProps({
 })
 const box = ref(null)
 onMounted(() => {
-	document.addEventListener('scroll', () => {
-		if (window.innerWidth >= 720) return
-		let el = box.value,
-			elTop = el?.offsetTop || 0,
-			elHeight = el.offsetHeight,
-			mid =
-				document.scrollingElement.scrollTop + (window.innerHeight >> 1)
-		if (mid > elTop && mid < elTop + elHeight) {
-			el.focus()
-		}
-	})
+	document.addEventListener('scroll', activeBox)
 })
+function activeBox() {
+	if (window.innerWidth >= 720) return
+	let el = box.value,
+		elTop = el?.offsetTop || 0,
+		elHeight = el?.offsetHeight || 0,
+		mid = document?.scrollingElement?.scrollTop + (window.innerHeight / 2)
+	if (mid > elTop && mid < elTop + elHeight) {
+		el.focus()
+	}
+}
 </script>
 
 <template>
@@ -29,7 +29,6 @@ onMounted(() => {
 		:style="{ '--scale': scale }"
 		tabindex="-1"
 		:ref="(_) => (box = _)"
-		@touchdown="box.focus"
 	>
 		<component
 			:is="el"

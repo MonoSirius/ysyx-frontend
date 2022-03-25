@@ -20,22 +20,29 @@ export const routes = [{
 	meta: { title: '用户注册 | 一生一芯计划' },
 	component: () => import('./src/register.vue')
 }, {
-	path: '/user/:userID/',
+	path: '/user/:userID/:action?',
 	meta: { title: '用户详情 | 一生一芯计划' },
 	component: () => import('./src/register.vue')
+}, {
+	path: '/settings/:action?',
+	meta: { title: '账号设置 | 一生一芯计划' },
+	component: () => import('./src/settings.vue')
+}, {
+	path: '/space/:action?',
+	meta: { title: '个人空间 | 一生一芯计划' },
+	component: () => import('./src/space.vue')
 }, {
 	path: '/redirect:pathMatch(.*)',
 	// meta: { title: 'Redirect' },
 	component: () => import('./src/redirect.vue')
 }, {
-	path: '/status/:code',
-	alias: '/:pathMatch(.*)',
+	path: '/:code',
 	meta: {
 		/**
 		 * @param {import('vue-router').RouteLocationNormalized} to 
 		 * @returns {String}
 		 */
-		title: to => `${to.params.code || '404'} | 一生一芯计划`
+		title: to => `${/^\d+$/g.test(to.params.code) && to.params.code || '404'} | 一生一芯计划`
 	},
 	component: () => import('./src/status.vue')
 }]

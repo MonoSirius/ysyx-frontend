@@ -10,18 +10,6 @@ import ByteDance from "./sponsors/ByteDance.vue";
 import Youdao from "./sponsors/Youdao.vue";
 import CRVA from "./sponsors/CRVA.vue";
 import BAAI from "./sponsors/BAAI.vue";
-// Scrolling animation
-import { ref, onMounted } from "vue";
-// Scroll parameters (optional)
-const div = ref(null),
-	viewTop = ref(0);
-onMounted(() => {
-	document.addEventListener("scroll", () => {
-		if (window.innerWidth >= 720) return;
-		let st = document.scrollingElement.scrollTop;
-		viewTop.value = st - div.value.offsetTop;
-	});
-});
 </script>
 
 

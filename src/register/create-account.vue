@@ -48,9 +48,9 @@ check()
 
 <template>
 	<container
-		flex
 		flex-column
 		flex-center
+		align-center
 		flex-grow
 		:pad="false"
 		:frame="true"

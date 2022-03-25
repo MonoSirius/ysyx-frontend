@@ -9,7 +9,10 @@ const LUT = {
 		500: '应用内部错误',
 	},
 	route = useRoute(),
-	code = computed(() => route.params.code || 404)
+	code = computed(() =>
+		/^\d+$/g.test(route.params.code) && route.params.code
+		|| 404
+	)
 </script>
 
 <template>
