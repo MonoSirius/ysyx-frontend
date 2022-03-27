@@ -4,7 +4,8 @@ import Btn from '@CC/Button.vue'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 const LUT = {
-		403: '您没有访问权限',
+		401: '您当前身份无法访问此服务, 建议您登录后重试',
+		403: '您的没有访问此服务的权限',
 		404: '无法找到页面',
 		500: '应用内部错误',
 	},
@@ -23,6 +24,7 @@ const LUT = {
 			justify-content: center;
 			align-items: center;
 		"
+		w1280
 	>
 		<div style="display: flex; align-items: left; flex-direction: column">
 			<h1>{{ code }}</h1>
@@ -54,6 +56,6 @@ h1 {
 	font-size: 8rem;
 }
 h2 {
-	font-size: 3rem;
+	font-size: 2rem;
 }
 </style>

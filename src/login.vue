@@ -3,47 +3,32 @@ import Container from '@CC/Container.vue'
 import Btn from '@CC/Button.vue'
 import vForm from '@CC/Form.vue'
 import AlternatingDots from '@CC/spinners/AlternatingDots.vue'
-import { onActivated, ref, watch } from 'vue'
+import { computed, onActivated, ref, watch } from 'vue'
 import useUserStore from '@CS/user'
 import { router } from '@/router'
 import { useRoute } from 'vue-router'
+import guard from '@CL/guard'
 const [STANDBY, INCOMPLETE, IN_ACTION] = [0, 1, 2],
-	state = ref(INCOMPLETE),
+	inAction = ref(false),
 	errorMsg = ref(''),
 	login = ref(''),
-	loginValid = ref(false),
+	loginValid = computed(() => login.value.length >= 5),
 	password = ref(''),
-	passwordValid = ref(false),
-	user = useUserStore()
-watch(login, (str) => {
-	loginValid.value = str.length >= 5
-	if (state.value == STANDBY) {
-		errorMsg.value = ''
-	}
-})
-watch(password, (str) => {
-	passwordValid.value = str.length >= 5
-	if (state.value == STANDBY) {
-		errorMsg.value = ''
-	}
-})
-watch(loginValid, (bool) => {
-	changeState({ loginValid: bool })
-})
-watch(passwordValid, (bool) => {
-	changeState({ passwordValid: bool })
-})
-function changeState({
-	_login = loginValid.value,
-	_password = passwordValid.value,
-}) {
-	if (state.value != IN_ACTION) {
-		state.value = _login && _password ? STANDBY : INCOMPLETE
-	}
-}
+	passwordValid = computed(() => password.value.length >= 5),
+	state = computed(() => {
+		if (inAction.value) return IN_ACTION
+		if (errorMsg.value) return INCOMPLETE
+		if (!loginValid.value) return INCOMPLETE
+		if (!passwordValid.value) return INCOMPLETE
+		return STANDBY
+	}),
+	user = useUserStore(),
+	route = useRoute()
+watch(login, () => errorMsg.value = '')
+watch(password, (str) => errorMsg.value = '')
 async function loginAction(onIncomplete = () => {}) {
 	if (state.value == STANDBY) {
-		state.value = IN_ACTION
+		inAction.value = true
 		// Parse location.search arguments
 		errorMsg.value = ''
 		const successful = await user.login(
@@ -53,18 +38,20 @@ async function loginAction(onIncomplete = () => {}) {
 		)
 		if (!successful && !errorMsg.value) {
 			errorMsg.value = '登录失败: 您填写的信息有误'
-			state.value = INCOMPLETE
+			inAction.value = false
 		}
 	} else {
 		onIncomplete()
 	}
 }
 // Redirect upon successful login
-const onLogin = () => router.push(router.resolve('/space/'))
-watch(() => user.loginState, state => {
-	if (state) onLogin()
-})
-if (user.loginState) onLogin()
+guard(
+	() => !user.loginState,
+	route.query.from
+		? decodeURIComponent(route.query.from)
+		: '/space/',
+	false
+)
 </script>
 
 <template>

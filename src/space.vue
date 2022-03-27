@@ -1,5 +1,4 @@
 <script setup>
-import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Avatar from '@CC/Avatar.vue'
 import Container from '@CC/Container.vue'
@@ -7,6 +6,10 @@ import ReportGraph from './space/reportGraph.vue'
 import btn from '@CC/Button.vue'
 import vForm from '@CC/Form.vue'
 import useUserStore from '@CS/user'
+import guard from '@CL/guard'
+import { router } from '@/router'
+// Guard this path for logged in visitors only
+guard()
 const user = useUserStore(),
 	route = useRoute()
 </script>

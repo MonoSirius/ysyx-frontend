@@ -7,6 +7,8 @@ import btn from '@CC/Button.vue'
 import vForm from '@CC/Form.vue'
 import { confirm, prompt } from '@CC/WinStack.vue'
 import useUserStore from '@CS/user'
+import guard from '@CL/guard'
+guard()
 const user = useUserStore()
 // WindowStack call
 async function removeAvatar() {
