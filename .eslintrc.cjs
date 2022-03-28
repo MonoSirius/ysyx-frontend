@@ -67,6 +67,7 @@ module.exports = {
 					'no-\\w+'
 				],
 				'skipWordIfMatch': [
+					'vue',
 					'ysyx',
 					'vhost',
 					'nodemailer',
