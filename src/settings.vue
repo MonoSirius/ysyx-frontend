@@ -5,7 +5,7 @@ import Avatar from '@CC/Avatar.vue'
 import Container from '@CC/Container.vue'
 import btn from '@CC/Button.vue'
 import vForm from '@CC/Form.vue'
-import { confirm, prompt } from '@CC/WinStack.vue'
+import { confirm, prompt, select } from '@CC/WinStack.vue'
 import useUserStore from '@CS/user'
 import guard from '@CL/guard'
 guard()
@@ -14,6 +14,27 @@ const user = useUserStore()
 async function removeAvatar() {
 	if (await confirm('确认移除您的头像?'))
 		prompt('删除成功', '您的头像已经移除')
+}
+async function updateAvatar() {
+	const r = {
+		get d() {
+			return Math.random().toString(16).replace(/^\w*\./ig, '')
+		},
+		get s() {
+			return Math.random() > 0.5
+		}
+	}
+	if (await confirm('确认？'))
+		console.log(await select('Select SOMETHING!', [
+			['a', r.d, r.s, r.s],
+			['b', r.d, r.s, r.s],
+			['c', r.d, r.s, r.s],
+			['d', r.d, r.s, r.s],
+			['e', r.d, r.s, r.s],
+			['f', r.d, r.s, r.s],
+			['g', r.d, r.s, r.s],
+			['h', r.d, r.s, r.s],
+		]))
 }
 </script>
 
@@ -48,10 +69,16 @@ async function removeAvatar() {
 							:userID="user.userID"
 							:size="8"
 						/>
-						<btn type="solid brand" style="margin: 10px"
+						<btn
+							type="solid brand"
+							style="margin: 10px"
+							@click="updateAvatar"
 							>更改头像</btn
 						>
-						<btn type="solid red" style="margin: 10px" @click="removeAvatar"
+						<btn
+							type="solid red"
+							style="margin: 10px"
+							@click="removeAvatar"
 							>移除头像</btn
 						>
 					</container>
@@ -68,7 +95,11 @@ async function removeAvatar() {
 					<input style="max-width: 300px" type="text" />
 					<label>密码</label>
 					<input style="max-width: 300px" type="text" />
-					<btn type="solid green disabled" style="margin: 10px; max-width: 8em">保存更改</btn>
+					<btn
+						type="solid green disabled"
+						style="margin: 10px; max-width: 8em"
+						>保存更改</btn
+					>
 				</v-form>
 			</container>
 		</container>
@@ -88,7 +119,11 @@ async function removeAvatar() {
 					<option value="related">仅接收与我相关的通知</option>
 					<option value="none">不接收自动发送的通知</option>
 				</select>
-				<btn type="solid green disabled" style="margin: 10px; max-width: 8em">保存更改</btn>
+				<btn
+					type="solid green disabled"
+					style="margin: 10px; max-width: 8em"
+					>保存更改</btn
+				>
 			</v-form>
 		</container>
 	</container>
