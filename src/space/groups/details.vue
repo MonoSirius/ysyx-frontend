@@ -100,11 +100,12 @@ export default defineComponent({
 				})
 		},
 		async selectPrivileges() {
-			this.privileges = await select(
+			const result = await select(
 					`设置用户组 [${this.id}] 的权限`,
 					PRIV_LIST.map(p => [p, p, ~this.privileges.indexOf(p)]),
 					false
 				)
+			if (Array.isArray(result)) this.privileges = result
 		},
 		async remove() {
 			if (await confirm(

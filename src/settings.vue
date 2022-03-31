@@ -20,7 +20,7 @@ async function updateAvatar() {
 			return Math.random() > 0.5
 		}
 	}
-	if (await confirm('确认？'))
+	if (await confirm('确认？', undefined, { abortable: true }))
 		console.log(await select('Select SOMETHING!', [
 			['a', r.d, r.s, r.s],
 			['b', r.d, r.s, r.s],
