@@ -1,9 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import Avatar from '@CC/Avatar.vue'
-import Container from '@CC/Container.vue'
-import btn from '@CC/Button.vue'
 const route = useRoute()
 </script>
 

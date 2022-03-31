@@ -1,9 +1,5 @@
 <script setup>
-import Container from '@CC/Container.vue'
-import Btn from '@CC/Button.vue'
-import vForm from '@CC/Form.vue'
 import VueCountdown from '@chenfengyuan/vue-countdown'
-import AlternatingDots from '@CC/spinners/AlternatingDots.vue'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { callRegisterApi, useRegisterStore } from '../register.vue'

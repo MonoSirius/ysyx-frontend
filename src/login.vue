@@ -1,8 +1,4 @@
 <script setup>
-import Container from '@CC/Container.vue'
-import Btn from '@CC/Button.vue'
-import vForm from '@CC/Form.vue'
-import AlternatingDots from '@CC/spinners/AlternatingDots.vue'
 import { computed, onActivated, ref, watch } from 'vue'
 import useUserStore from '@CS/user'
 import { router } from '@/router'

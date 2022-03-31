@@ -1,5 +1,4 @@
 <script setup>
-import Responsive from "@CC/Responsive.vue";
 </script>
 
 <template>

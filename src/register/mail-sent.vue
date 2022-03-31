@@ -1,7 +1,5 @@
 <script setup>
-import Container from '@CC/Container.vue'
 import VueCountdown from '@chenfengyuan/vue-countdown'
-import Btn from '@CC/Button.vue'
 import { useRegisterStore } from '../register.vue'
 import { ref } from 'vue'
 const registerStore = useRegisterStore(),

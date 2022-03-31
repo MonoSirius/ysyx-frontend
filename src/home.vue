@@ -1,6 +1,4 @@
 <script setup>
-import Container from '@CC/Container.vue'
-import Footer from '@CC/Footer.vue'
 import Slogan from './components/Slogan.vue'
 import Actions from './components/Actions.vue'
 import Sponsors from './components/Sponsors.vue'
@@ -21,5 +19,5 @@ import Sponsors from './components/Sponsors.vue'
 	<container w1280 title="合作/赞助机构" :next-level="true">
 		<Sponsors />
 	</container>
-	<Footer />
+	<v-footer />
 </template>

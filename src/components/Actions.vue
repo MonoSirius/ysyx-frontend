@@ -1,6 +1,4 @@
 <script setup>
-import Responsive from "@CC/Responsive.vue";
-import Btn from "@CC/Button.vue";
 </script>
 
 <template>

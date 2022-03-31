@@ -1,6 +1,4 @@
 <script setup>
-import Container from '@CC/Container.vue'
-import Btn from '@CC/Button.vue'
 import { router } from '@/router'
 const emit = defineEmits(['next'])
 function goBack() {

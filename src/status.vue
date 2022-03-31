@@ -1,6 +1,4 @@
 <script setup>
-import Container from '@CC/Container.vue'
-import Btn from '@CC/Button.vue'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 const LUT = {

@@ -1,7 +1,4 @@
 <script setup>
-import Container from '@CC/Container.vue'
-import Btn from '@CC/Button.vue'
-import ChasingCircle from '@CC/spinners/ChasingCircle.vue'
 import useUserStore from '@CS/user'
 import { useRoute } from 'vue-router'
 import { router } from '@/router'

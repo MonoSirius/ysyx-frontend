@@ -1,13 +1,14 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import Avatar from '@CC/Avatar.vue'
-import Container from '@CC/Container.vue'
 import ReportGraph from './space/reportGraph.vue'
-import btn from '@CC/Button.vue'
-import vForm from '@CC/Form.vue'
 import useUserStore from '@CS/user'
 import guard from '@CL/guard'
 import { router } from '@/router'
+// Window components
+import { $ } from '@CC/WinStack.vue'
+import Groups from './space/groups/groups.vue'
+// Window component callback declaration
+const groups = () => $('用户组管理', Groups)
 // Guard this path for logged in visitors only
 guard()
 const user = useUserStore(),
@@ -111,7 +112,6 @@ const user = useUserStore(),
 				<label>当前可提交的申请</label>
 				<select style="max-width: 300px" disabled>
 					<option value="all">中文 - 简体</option>
-					>
 				</select>
 				<label>提交历史</label>
 				<select style="max-width: 300px">
@@ -126,6 +126,28 @@ const user = useUserStore(),
 				>
 			</v-form>
 		</container>
+		<container round content-left margin-v next-level>
+			<h3>系统设置</h3>
+			<container flex-row flex-wrap app-container :pad="false">
+				<container round next-level @click="groups" :pad="false">
+					<responsive style="padding: 1em 1.5em">
+						<h4>用户组管理</h4>
+						<p>
+							添加、移除、修改系统内用户组的名称、权限和可见范围
+						</p>
+					</responsive>
+				</container>
+				<container round next-level :pad="false">
+					<responsive style="padding: 1em 1.5em">
+						<h4>公告管理</h4>
+						<p>
+							添加、移除、修改系统公告,
+							所有改动将会实时反应在主站的公告栏
+						</p>
+					</responsive>
+				</container>
+			</container>
+		</container>
 	</container>
 </template>
 
@@ -135,5 +157,19 @@ h3 {
 	padding-bottom: 10px;
 	margin-bottom: 20px;
 	border-bottom: 1px solid var(--cb-gray);
+}
+[app-container] {
+	margin: -1rem;
+	align-items: stretch;
+	& > * {
+		border: 1px solid var(--cb-gray-light);
+		max-width: 320px;
+		margin: 1rem;
+	}
+	p {
+		font-size: 0.9em;
+		color: var(--ct-gray);
+		padding-top: 0.3em;
+	}
 }
 </style>

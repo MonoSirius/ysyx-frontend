@@ -1,5 +1,4 @@
 <script setup>
-import ChasingCircle from '@CC/spinners/ChasingCircle.vue'
 import { useRoute } from 'vue-router'
 import { router } from '@/router'
 import { onMounted, ref } from 'vue'

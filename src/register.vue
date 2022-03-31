@@ -1,6 +1,4 @@
 <script setup>
-import Container from '@CC/Container.vue'
-import ChasingCircle from '@CC/spinners/ChasingCircle.vue'
 import SendMail from './register/send-mail.vue'
 import MailSent from './register/mail-sent.vue'
 import TokenInvalid from './register/token-invalid.vue'

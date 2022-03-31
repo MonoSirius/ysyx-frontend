@@ -1,6 +1,4 @@
 <script setup>
-import Header from '@CC/Header.vue'
-import AppBody from '@CC/Body.vue'
 import WinStack from '@CC/WinStack.vue'
 import useUserStore from '@CS/user'
 import { router } from '../router'
@@ -24,9 +22,9 @@ router.beforeResolve((to, from, next) => {
 </script>
 
 <template>
-	<Header :loading="loading" />
+	<v-header :loading="loading" />
 	<WinStack />
-	<AppBody>
+	<v-body>
 		<router-view></router-view>
-	</AppBody>
+	</v-body>
 </template>

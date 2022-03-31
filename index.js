@@ -5,7 +5,11 @@ import { createApp, onMounted } from 'vue'
 import App from './src/index.vue'
 import { router } from './router'
 import { createPinia } from 'pinia'
-createApp(App)
+import * as componentList from '@CL/components'
+const Vue = createApp(App)
 	.use(router)
 	.use(createPinia())
-	.mount('#app')
+Object
+	.entries(componentList)
+	.forEach(([name, el]) => Vue.component(name, el))
+Vue.mount('#app')

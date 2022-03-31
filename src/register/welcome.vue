@@ -1,5 +1,4 @@
 <script setup>
-import Container from '@CC/Container.vue'
 </script>
 
 <template>
