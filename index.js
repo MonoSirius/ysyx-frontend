@@ -1,3 +1,4 @@
+/* eslint-env node, browser */
 import '@CR/global.css'
 import '@CR/fa/all.min.css'
 // Mount app
@@ -13,3 +14,5 @@ Object
 	.entries(componentList)
 	.forEach(([name, el]) => Vue.component(name, el))
 Vue.mount('#app')
+import * as fn from '@CC/WinStack.vue'
+window.fn = fn

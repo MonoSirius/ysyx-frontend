@@ -18,6 +18,7 @@
 				flex-column
 				:pad="false"
 				:responsive="true"
+				@click="editLocale"
 			>
 				<div
 					v-for="(localeName, locale) in name"
@@ -59,7 +60,7 @@
 		</v-form>
 	</container>
 	<div btn-group>
-		<btn type="solid green" @click="RETURN()">应用更改</btn>
+		<btn type="solid green" @click="submit">应用更改</btn>
 		<btn type="solid red" v-if="mode == UPDATE && !system" @click="remove"
 			>删除用户组</btn
 		>
@@ -68,15 +69,16 @@
 </template>
 
 <script>
-import { confirm, select } from '@CC/WinStack.vue'
+import { confirm, select, editLocale, alert } from '@CC/WinStack.vue'
 import createApi from '@CL/api'
 import { defineComponent, ref } from 'vue'
 import { PRIV_LIST } from './groups.vue'
-const [CREATE, UPDATE] = [0, 1],
-	api = [
+const api = [
 		createApi('/groups/create'),
-		createApi('/groups/update')
-	]
+		createApi('/groups/update'),
+		createApi('/groups/remove'),
+	],
+	[CREATE, UPDATE, REMOVE] = Object.keys(api)
 export default defineComponent({
 	setup({ id = '', name = {}, privileges = [], system = false, visibility = "SELF" } = {}) {
 		const mode = id ? UPDATE : CREATE
@@ -93,15 +95,23 @@ export default defineComponent({
 		submit() {
 			const { id, name, privileges, visibility, mode } = this
 			this.$emit('loading', true)
-			api[mode]({id, name, privileges, visibility})
+			api[mode]({id, localeName: name, privileges, visibility})
 				.then(async res => {
+					this.$emit('loading', false)
 					if (res.ok) this.RETURN()
 					else this.errMsg = await res.text()
 				})
 		},
+		async editLocale() {
+			const result = await editLocale(
+					`设置用户组名称: ${this.id}`,
+					this.name
+				)
+			if (result) this.name = result
+		},
 		async selectPrivileges() {
 			const result = await select(
-					`设置用户组 [${this.id}] 的权限`,
+					`设置用户组权限: ${this.id}`,
 					PRIV_LIST.map(p => [p, p, ~this.privileges.indexOf(p)]),
 					false
 				)
@@ -109,11 +119,22 @@ export default defineComponent({
 		},
 		async remove() {
 			if (await confirm(
-				`删除用户组 [${this.id}] ?`,
+				`删除用户组'${this.id}'?`,
 				'删除用户组会同时解除所有用户与此用户组的关联, 这可能导致用户失去一部分权限',
 				{ color: 'red', text: '删除' }
-			))
-				this.RETURN()
+			)) {
+				this.$emit('loading', true)
+				api[REMOVE]({ id: this.id }).then(async res => {
+					this.$emit('loading', false)
+					if (res.ok) {
+						await alert('删除成功', `用户组 ${this.id} 已删除`)
+						this.RETURN()
+					} else {
+						await alert('操作失败', await res.text())
+						this.errMsg = await res.text()
+					}
+				})
+			}
 		}
 	}
 })

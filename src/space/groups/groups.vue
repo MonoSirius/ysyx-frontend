@@ -12,7 +12,7 @@
 			</div>
 			<div group-id-name>
 				<div group-id>{{ group.id }}</div>
-				<div group-name>{{ group.name?.["zh-CN"] || group.id }}</div>
+				<div group-name><locale-name :name="group.name" :fallback="group.id" /></div>
 			</div>
 			<div icon>
 				<i class="fas fa-angle-right"></i>
