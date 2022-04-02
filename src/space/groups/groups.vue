@@ -31,7 +31,7 @@ import { defineComponent, onActivated, ref } from 'vue'
 import { $ } from '@CC/WinStack.vue'
 import Details from './details.vue'
 // Group list api
-const getGroupsList = createApi({ url: '/groups' })
+const getGroupsList = createApi('/groups')
 export let PRIV_LIST = []
 async function updateList() {
 	this.$emit('loading', true);

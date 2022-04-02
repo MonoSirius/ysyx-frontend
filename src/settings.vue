@@ -1,7 +1,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { confirm, prompt, select } from '@CC/WinStack.vue'
+import { $, confirm, prompt, select } from '@CC/WinStack.vue'
+import EditAvatar from './settings/edit-avatar.vue';
 import useUserStore from '@CS/user'
 import guard from '@CL/guard'
 guard()
@@ -11,26 +12,8 @@ async function removeAvatar() {
 	if (await confirm('确认移除您的头像?'))
 		prompt('删除成功', '您的头像已经移除')
 }
-async function updateAvatar() {
-	const r = {
-		get d() {
-			return Math.random().toString(16).replace(/^\w*\./ig, '')
-		},
-		get s() {
-			return Math.random() > 0.5
-		}
-	}
-	if (await confirm('确认？', undefined, { abortable: true }))
-		console.log(await select('Select SOMETHING!', [
-			['a', r.d, r.s, r.s],
-			['b', r.d, r.s, r.s],
-			['c', r.d, r.s, r.s],
-			['d', r.d, r.s, r.s],
-			['e', r.d, r.s, r.s],
-			['f', r.d, r.s, r.s],
-			['g', r.d, r.s, r.s],
-			['h', r.d, r.s, r.s],
-		]))
+function updateAvatar() {
+	$('编辑头像', EditAvatar, {}, user.userID)
 }
 </script>
 

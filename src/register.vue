@@ -69,7 +69,7 @@ import sha256 from '@CL/sha256'
 import Rx from '@CL/Rx'
 import { defineStore } from 'pinia'
 import useUserStore from '@CS/user'
-export const callRegisterApi = createApi({ url: '/register' })
+export const callRegisterApi = createApi('/register')
 // Cached result list for validated ID list
 const checkedIdList = {}, user = useUserStore()
 // Pinia Store
