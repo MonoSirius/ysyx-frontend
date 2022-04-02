@@ -17,7 +17,11 @@ const user = useUserStore(),
 
 <template>
 	<container flex-column flex-start flex-grow content-h-fill content-left>
-		<container><h2>个人空间</h2></container>
+		<container style="padding-left: 0; padding-right: 0;">
+			<h2>
+				个人空间
+			</h2>
+		</container>
 		<container round content-left margin-v next-level>
 			<h3>学习记录</h3>
 			<container

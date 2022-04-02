@@ -7,6 +7,8 @@ export default defineConfig({
 	plugins: [vue(), VitePWA()],
 	publicDir: './common/public',
 	resolve: {
+		// eslint-disable-next-line spellcheck/spell-checker
+		dedupe: ['vue'],
 		alias: {
 			'@': path.resolve(__dirname),
 			'@C': path.resolve(__dirname, './common'),

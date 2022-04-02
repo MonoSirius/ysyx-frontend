@@ -79,6 +79,7 @@ const api = {
 		domain: ['upload', location.host].join('.'),
 		method: 'PUT',
 		headers: {},
+		credentials: 'include',
 		processor: _ => _
 	})
 }
