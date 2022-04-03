@@ -14,7 +14,10 @@
 					rotation = 0;
 					ready = true;
 				"
-				style="background-color: var(--cf-gray-dark)"
+				:style="{
+					backgroundColor: 'var(--cf-gray-dark)',
+					opacity: ready ? 1 : 0
+				}"
 			/>
 			<div
 				style="
