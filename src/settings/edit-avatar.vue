@@ -16,7 +16,7 @@
 				"
 				:style="{
 					backgroundColor: 'var(--cf-gray-dark)',
-					opacity: ready ? 1 : 0
+					opacity: ready ? 1 : 0,
 				}"
 			/>
 			<div
@@ -103,18 +103,18 @@ export default defineComponent({
 		this.size = this.$refs.frame.offsetWidth - 50
 	},
 	methods: {
-		async upload() {
+		upload() {
 			if (!this.ready) return
-			this.$emit('loading', true)
-			const data = this.editor.getImageScaled(), max_size = 2048 * 1024
-			let blob, quality = 1
-			while ((
-				blob = await new Promise(r => data.toBlob(r, 'image/png', quality))
-			).size > max_size) quality *= 0.9
-			const res = await api.uploadAvatar(blob)
-			if (res.ok) this.RETURN
-			else this.errMsg = await res.text()
-			this.$emit('loading', false)
+			this.LOAD(async () => {
+				const data = this.editor.getImageScaled(), max_size = 2048 * 1024
+				let blob, quality = 1
+				while ((
+					blob = await new Promise(r => data.toBlob(r, 'image/png', quality))
+				).size > max_size) quality *= 0.9
+				const res = await api.uploadAvatar(blob)
+				if (res.ok) this.RETURN(setTimeout(() => location.href = location.href, 500))
+				else this.errMsg = await res.text()
+			})
 		},
 		remove() {}
 	}

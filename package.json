@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --outDir var/dist",
+    "deploy": "node ./common/tools/deploy.mjs",
     "preview": "vite preview",
     "stat": "cloc --exclude-dir=node_modules,var --exclude-ext=svg,json ."
   },

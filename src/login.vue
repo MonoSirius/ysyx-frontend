@@ -4,6 +4,7 @@ import useUserStore from '@CS/user'
 import { router } from '@/router'
 import { useRoute } from 'vue-router'
 import guard from '@CL/guard'
+import { alert } from '@CC/WinStack.vue'
 const [STANDBY, INCOMPLETE, IN_ACTION] = [0, 1, 2],
 	inAction = ref(false),
 	errorMsg = ref(''),
@@ -32,9 +33,17 @@ async function loginAction(onIncomplete = () => {}) {
 			password.value,
 			(msg) => errorMsg.value = msg
 		)
-		if (!successful && !errorMsg.value) {
+		inAction.value = false
+		if (successful) {
+			if (
+				!window?.navigator?.standalone
+				&& /Mobile/ig.test(navigator.userAgent)
+			) setTimeout(alert(
+				'Web App Available',
+				'Save this site as a web app to get best experience'
+			), 1000);
+		} else if (!successful && !errorMsg.value) {
 			errorMsg.value = '登录失败: 您填写的信息有误'
-			inAction.value = false
 		}
 	} else {
 		onIncomplete()

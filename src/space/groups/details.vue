@@ -72,7 +72,7 @@
 import { confirm, select, editLocale, alert } from '@CC/WinStack.vue'
 import createApi from '@CL/api'
 import { defineComponent, ref } from 'vue'
-import { PRIV_LIST } from './groups.vue'
+import { PRIV_LIST } from './index.vue'
 const api = [
 		createApi('/groups/create'),
 		createApi('/groups/update'),

@@ -13,10 +13,10 @@
 			"type": "image/png"
 		}
 	],
-	"start_url": "/web-app",
+	"start_url": "/space",
 	"background_color": "#1c4c82",
 	"orientation": "portrait",
 	"display": "standalone",
-	"scope": "/",
+	"scope": "https://ysyx.dev",
 	"description": "YSYX Web Platform"
 }
