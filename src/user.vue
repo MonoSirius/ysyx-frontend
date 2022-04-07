@@ -60,7 +60,6 @@ onMounted(async () => {
 					/>
 				</container>
 				<container
-					content-center
 					flex-column
 					margin-h
 					style="flex-grow: 999"
