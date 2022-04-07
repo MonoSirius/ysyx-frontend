@@ -46,7 +46,7 @@ const user = useUserStore(),
 						round
 						margin-v
 						flex-column
-						align-center
+						content-center
 						style="
 							max-width: 100%;
 							overflow: hidden;

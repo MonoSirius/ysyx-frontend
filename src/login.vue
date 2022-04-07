@@ -60,7 +60,7 @@ guard(
 </script>
 
 <template>
-	<container flex-column flex-center align-center flex-grow :pad="false">
+	<container flex-column flex-center content-center flex-grow :pad="false">
 		<h2>登录「一生一芯」账号</h2>
 		<container
 			type="alert"

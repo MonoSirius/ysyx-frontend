@@ -10,7 +10,7 @@ const registerStore = useRegisterStore(),
 	<container
 		flex-column
 		flex-center
-		align-center
+		content-center
 		flex-grow
 		:pad="false"
 		:frame="true"

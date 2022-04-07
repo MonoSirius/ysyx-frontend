@@ -41,7 +41,7 @@ function updateAvatar() {
 						round
 						margin-v
 						flex-column
-						align-center
+						content-center
 					>
 						<avatar
 							:style="{ margin: 'auto', 'margin-bottom': '20px' }"
