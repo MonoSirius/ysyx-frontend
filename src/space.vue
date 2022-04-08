@@ -5,7 +5,7 @@ import useUserStore from '@CS/user'
 import guard from '@CL/guard'
 import { router } from '@/router'
 // Window components
-import { $ } from '@CC/WinStack.vue'
+import { $, ProgressReport as PR } from '@CC/WinStack.vue'
 import Groups from './space/groups/index.vue'
 import SearchUser from './space/searchUser/index.vue'
 // Window component callback declaration
@@ -65,24 +65,36 @@ const user = useUserStore(),
 					style="min-width: 240px; margin-right: 10px; flex-grow: 999"
 				>
 					<label>最新提交的记录</label>
-					<btn
-						type="solid gray disabled"
-						style="margin: 20px; max-width: 8em"
-						>编辑</btn
-					>
-					<label></label>
+					<input
+						type="button"
+						style="max-width: 8em"
+						value="编辑"
+						disabled
+					/>
 					<label>创建新的学习记录</label>
-					<btn
-						type="solid gray"
+					<container
+						form-input
+						next-level
+						flex-row
+						flex-center
+						content-center
 						style="
-							margin: 20px;
-							max-width: 8em;
-							font-size: 3em;
-							font-weight: light !important;
-							border: 2px dashed var(--cb-gray);
+							border-radius: 1em;
+							border: 2px dashed var(--cf-next-next-level);
 						"
-						>+</btn
+						@click="PR.submit"
+						:responsive="true"
 					>
+						<span
+							style="
+								color: var(--ct-gray-light);
+								font-size: 5rem;
+								font-weight: lighter;
+								line-height: 150%;
+							"
+							>+</span
+						>
+					</container>
 				</v-form>
 			</container>
 		</container>
@@ -113,45 +125,48 @@ const user = useUserStore(),
 		<container round content-left margin-v next-level>
 			<h3>学生管理</h3>
 			<container flex-row flex-wrap app-container :pad="false">
-				<container round next-level @click="searchUser" :pad="false">
-					<responsive style="padding: 1em 1.5em">
-						<h4>搜索用户</h4>
-						<p>根据用户组、ID、姓名、机构搜索用户</p>
-					</responsive>
+				<container
+					round
+					next-level
+					@click="searchUser"
+					:responsive="true"
+				>
+					<h4>搜索用户</h4>
+					<p>根据用户组、ID、姓名、机构搜索用户</p>
 				</container>
-				<container round next-level @click="searchPR" :pad="false">
-					<responsive style="padding: 1em 1.5em">
-						<h4>查阅学习报告</h4>
-						<p>查阅用户提交的学习报告</p>
-					</responsive>
+				<container
+					round
+					next-level
+					@click="searchPR"
+					:responsive="true"
+				>
+					<h4>查阅学习报告</h4>
+					<p>查阅用户提交的学习报告</p>
 				</container>
-				<container round next-level @click="searchForm" :pad="false">
-					<responsive style="padding: 1em 1.5em">
-						<h4>审核申请表</h4>
-						<p>审阅用户提交的申请表</p>
-					</responsive>
+				<container
+					round
+					next-level
+					@click="searchForm"
+					:responsive="true"
+				>
+					<h4>审核申请表</h4>
+					<p>审阅用户提交的申请表</p>
 				</container>
 			</container>
 		</container>
 		<container round content-left margin-v next-level>
 			<h3>系统设置</h3>
 			<container flex-row flex-wrap app-container :pad="false">
-				<container round next-level @click="groups" :pad="false">
-					<responsive style="padding: 1em 1.5em">
-						<h4>用户组管理</h4>
-						<p>
-							添加、移除、修改系统内用户组的名称、权限和可见范围
-						</p>
-					</responsive>
+				<container round next-level @click="groups" :responsive="true">
+					<h4>用户组管理</h4>
+					<p>添加、移除、修改系统内用户组的名称、权限和可见范围</p>
 				</container>
-				<container round next-level :pad="false">
-					<responsive style="padding: 1em 1.5em">
-						<h4>公告管理</h4>
-						<p>
-							添加、移除、修改系统公告,
-							所有改动将会实时反应在主站的公告栏
-						</p>
-					</responsive>
+				<container round next-level :responsive="true">
+					<h4>公告管理</h4>
+					<p>
+						添加、移除、修改系统公告,
+						所有改动将会实时反应在主站的公告栏
+					</p>
 				</container>
 			</container>
 		</container>
