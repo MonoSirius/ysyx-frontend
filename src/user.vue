@@ -1,6 +1,6 @@
 <script setup>
 import { router } from '@/router';
-import { $ } from '@CC/WinStack.vue';
+import { $, select } from '@CC/WinStack.vue';
 import createApi from '@CL/api';
 import useUserStore from '@CS/user';
 import { onMounted, ref, watch } from 'vue'
@@ -31,7 +31,31 @@ onMounted(async () => {
 	Object.assign(user.value, data)
 })
 const settings = () => $('偏好设置', Settings)
-const updateAvatar = () => $('编辑头像', EditAvatar, {}, user.userID)
+const editAvatar = () => $('编辑头像', EditAvatar, {}, user.userID)
+const
+	loadGroups = createApi('/groups'),
+	updateGroups = createApi(`/user/${userID}/groups`),
+	editGroups = async () => {
+		const currentGroups = user.value.groups?.map(({id}) => id) || []
+		select(
+			`设置 ${user.name || userID} 的用户组`,
+			loadGroups()
+				.then(res => res.json())
+				.then(l => l.map(({ id, name }) => [
+					id,
+					name,
+					currentGroups.includes(id)
+				])),
+			{
+				async hook(arr) {
+					updateGroups({
+						add: arr.filter(id => !currentGroups.includes(id)),
+						sub: currentGroups.filter(id => !arr.includes(id))
+					}).then(() => location.href = location.href)
+				}
+			}
+		)
+	}
 </script>
 
 <template>
@@ -72,7 +96,7 @@ const updateAvatar = () => $('编辑头像', EditAvatar, {}, user.userID)
 		</container>
 		<container round content-left margin-v next-level>
 			<h3>基本信息</h3>
-			<container margin-v flex-row align-start flex-wrap :pad="false">
+			<container margin-v flex-row flex-center flex-wrap :pad="false">
 				<container
 					content-center
 					margin-v
@@ -89,13 +113,18 @@ const updateAvatar = () => $('编辑头像', EditAvatar, {}, user.userID)
 					<btn
 						type="solid gray-brand"
 						v-if="user?.editable?.avatar"
-						@click="updateAvatar"
+						@click="editAvatar"
 						style="margin-top: 1em"
 					>
 						<i class="fa fa-edit"></i>&nbsp; 编辑头像
 					</btn>
 				</container>
-				<container flex-column margin-h style="flex-grow: 999">
+				<container
+					flex-column
+					flex-center
+					margin-h
+					style="flex-grow: 999"
+				>
 					<div entry>
 						<span title>ID</span>
 						<span content>{{ route.params.userID }}</span>
@@ -137,7 +166,11 @@ const updateAvatar = () => $('编辑头像', EditAvatar, {}, user.userID)
 						<span content v-else
 							><badge style="margin: 0">无可见群组</badge></span
 						>
-						<container edit v-if="user?.editable?.mail">
+						<container
+							edit
+							v-if="user?.editable?.mail"
+							@click="editGroups"
+						>
 							<btn type="solid gray-brand">
 								<i class="fa fa-edit"></i>&nbsp; 设置群组
 							</btn>
@@ -225,7 +258,7 @@ h3 {
 			position: absolute;
 			top: 0;
 			right: 0;
-			font-size: 0.9em;
+			font-size: 0.8em;
 		}
 	}
 	[title] {

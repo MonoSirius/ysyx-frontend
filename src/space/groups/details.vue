@@ -113,7 +113,7 @@ export default defineComponent({
 			const result = await select(
 					`设置用户组权限: ${this.id}`,
 					PRIV_LIST.map(p => [p, p, ~this.privileges.indexOf(p)]),
-					false
+					{ showKey: false }
 				)
 			if (Array.isArray(result)) this.privileges = result
 		},

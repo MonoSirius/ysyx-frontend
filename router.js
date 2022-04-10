@@ -22,7 +22,7 @@ export const routes = [{
 }, {
 	path: '/user/:userID/:action?',
 	meta: { title: '用户详情 | 一生一芯计划' },
-	component: () => import('./src/user.vue')
+	component: () => import('./src/userView.vue')
 }, {
 	path: '/space/:action?',
 	meta: { title: '个人空间 | 一生一芯计划' },
