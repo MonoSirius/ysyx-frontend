@@ -24,10 +24,6 @@ export const routes = [{
 	meta: { title: '用户详情 | 一生一芯计划' },
 	component: () => import('./src/user.vue')
 }, {
-	path: '/settings/:action?',
-	meta: { title: '账号设置 | 一生一芯计划' },
-	component: () => import('./src/settings.vue')
-}, {
 	path: '/space/:action?',
 	meta: { title: '个人空间 | 一生一芯计划' },
 	component: () => import('./src/space.vue')

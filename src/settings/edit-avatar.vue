@@ -76,6 +76,7 @@
 import createApi from '@CL/api'
 import { defineComponent, ref, computed } from 'vue'
 import { VueAvatar as AvatarEditor } from 'vue-avatar-editor-improved'
+import { router } from '@/router'
 const api = {
 	uploadAvatar: createApi({
 		path: '/avatar',
@@ -112,7 +113,12 @@ export default defineComponent({
 					blob = await new Promise(r => data.toBlob(r, 'image/png', quality))
 				).size > max_size) quality *= 0.9
 				const res = await api.uploadAvatar(blob)
-				if (res.ok) this.RETURN(setTimeout(() => location.href = location.href, 500))
+				if (res.ok) this.RETURN(
+					setTimeout(
+						() => router.go(router.resolve(`/redirect/${location.pathname}`)),
+						100
+					)
+				)
 				else this.errMsg = await res.text()
 			})
 		},
