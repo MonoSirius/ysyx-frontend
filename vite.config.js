@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [vue(), VitePWA()],
+	plugins: [vue()],
 	publicDir: './common/public',
 	resolve: {
 		// eslint-disable-next-line spellcheck/spell-checker
