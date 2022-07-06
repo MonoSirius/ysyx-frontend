@@ -2,9 +2,39 @@
 	<container frame-content>
 		<v-form>
 			<label>User ID (逗号分隔)</label>
-			<input type="text" autocomplete="off" v-model.trim="userID" />
-			<label>用户名 (逗号分隔)</label>
-			<input type="text" autocomplete="off" v-model.trim="names" />
+			<container
+				flex-row
+				style="margin: 1em 0"
+				:pad="false"
+				v-if="userIdList"
+			>
+				<template v-for="(userID, i) in userIdList" :key="i">
+					<badge type="solid blue">{{ userID }}</badge>
+				</template>
+			</container>
+			<input
+				type="text"
+				autocomplete="off"
+				v-model.trim="userID"
+				@keydown.enter="search"
+			/>
+			<label>姓名 (逗号分隔)</label>
+			<container
+				flex-row
+				style="margin: 1em 0"
+				:pad="false"
+				v-if="userNameList"
+			>
+				<template v-for="(name, i) in userNameList" :key="i">
+					<badge type="solid green">{{ name }}</badge>
+				</template>
+			</container>
+			<input
+				type="text"
+				autocomplete="off"
+				v-model.trim="userName"
+				@keydown.enter="search"
+			/>
 			<label>用户组</label>
 			<container
 				next-level
@@ -13,7 +43,7 @@
 				:responsive="true"
 				@click="selectGroups"
 			>
-				<badge v-for="(gid, i) in groups" :key="i">
+				<badge type="solid yellow" v-for="(gid, i) in groups" :key="i">
 					<locale-name :name="groupNameLUT[gid]" />
 				</badge>
 				<div
@@ -39,19 +69,23 @@
 
 <script>
 import createApi from '@CL/api'
-import { defineComponent, onActivated, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 // Child window components
 import { $, select } from '@CC/WinStack.vue'
-// import Details from './details.vue'
+import Search from './search.vue'
+const search = (searchArgs) => $('搜索用户', Search, {}, searchArgs)
 // Group list api
 const getGroupsList = createApi('/groups')
-export let PRIV_LIST = []
+function parseCommaSplittedList(str) {
+	const result = str.split(',').map(el => el.trim()).filter(el => !!el)
+	return result.length ? result : undefined
+}
 export default defineComponent({
 	setup() {
 		return {
 			userID: ref(''),
 			groups: ref([]),
-			names: ref([]),
+			userName: ref(''),
 			groupNameLUT: ref({})
 		}
 	},
@@ -72,60 +106,27 @@ export default defineComponent({
 				.then(l => select('选择用户组', l))
 			if (result) this.groups = result
 		},
- 		search() {},
+ 		search() {
+			search({
+				userID: this.userIdList,
+				name: this.userNameList,
+				groups: this.groupsList,
+			})
+		},
 		clear() {}
 	},
-	mounted() {
-	},
-	// onActivated() { updateList.apply(this) }
-})
-</script>
-
-
-<style lang="scss" scoped>
-[groups] {
-	user-select: none;
-	min-width: 50vw;
-	[group] {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		padding: 0 1em;
-		height: 3.6em;
-		align-items: center;
-		border-bottom: 1px solid var(--cb-gray-light);
-		[icon] {
-			font-size: 1.6em;
-			color: var(--ct-gray);
-			text-align: center;
-			width: 1.2em;
-			height: 1em;
-			line-height: 100%;
-			svg {
-				width: 100%;
-				opacity: 0;
-				[gt-mark] {
-					fill: var(--ct);
-				}
-			}
-		}
-		[group-id-name] {
-			flex-grow: 1;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: flex-start;
-			height: 100%;
-			padding: 0 1em;
-			[group-id] {
-				font-size: 0.8em;
-				color: var(--ct-gray);
-			}
-			[group-name] {
-				color: var(--ct-gray-dark);
-				margin: 0.1em 0;
-			}
+	computed: {
+		userIdList() {
+			return parseCommaSplittedList(this.userID)
+		},
+		userNameList() {
+			return parseCommaSplittedList(this.userName)
+		},
+		groupsList() {
+			return (Array.isArray(this.groups) && this.groups.length)
+				? [...this.groups]
+				: undefined
 		}
 	}
-}
-</style>
+})
+</script>

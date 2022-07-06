@@ -1,63 +1,3 @@
-<script setup>
-import { router } from '@/router';
-import { $, select } from '@CC/WinStack.vue';
-import createApi from '@CL/api';
-import useUserStore from '@CS/user';
-import { onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import Settings from './settings/settings.vue'
-import EditAvatar from './settings/edit-avatar.vue'
-const route = useRoute(),
-	localUser = useUserStore(),
-	userID = route.params.userID,
-	user = ref({
-		name: undefined,
-		mail: undefined,
-		groups: undefined
-	}),
-	userProfile = ref({
-		institution: undefined,
-	}),
-	load = createApi(`/user/${userID}/`)
-onMounted(async () => {
-	const data = await load().then(async res => {
-		if (res.ok) return res.json()
-		else router.push(router.resolve(`/${
-			res.status
-		}?${
-			await res.text()
-		}`))
-	}) || {};
-	Object.assign(user.value, data)
-})
-const settings = () => $('偏好设置', Settings)
-const editAvatar = () => $('编辑头像', EditAvatar, {}, user.userID)
-const
-	loadGroups = createApi('/groups'),
-	updateGroups = createApi(`/user/${userID}/groups`),
-	editGroups = async () => {
-		const currentGroups = user.value.groups?.map(({id}) => id) || []
-		select(
-			`设置 ${user.name || userID} 的用户组`,
-			loadGroups()
-				.then(res => res.json())
-				.then(l => l.map(({ id, name }) => [
-					id,
-					name,
-					currentGroups.includes(id)
-				])),
-			{
-				async hook(arr) {
-					updateGroups({
-						add: arr.filter(id => !currentGroups.includes(id)),
-						sub: currentGroups.filter(id => !arr.includes(id))
-					}).then(() => location.href = location.href)
-				}
-			}
-		)
-	}
-</script>
-
 <template>
 	<container
 		flex-column
@@ -72,7 +12,7 @@ const
 			style="padding-left: 0; padding-right: 0; display: flex"
 		>
 			<h2 style="display: block">
-				{{ user.name || route.params.userID }}
+				{{ user.name || userID }}
 				<span
 					style="
 						font-weight: normal;
@@ -106,7 +46,7 @@ const
 					:pad="false"
 				>
 					<avatar
-						:userID="route.params.userID"
+						:userID="userID"
 						:size="8"
 						style="margin: auto"
 					/>
@@ -127,7 +67,7 @@ const
 				>
 					<div entry>
 						<span title>ID</span>
-						<span content>{{ route.params.userID }}</span>
+						<span content>{{ userID }}</span>
 					</div>
 					<div entry>
 						<span title v-if="user.name">姓名</span>
@@ -168,7 +108,7 @@ const
 						>
 						<container
 							edit
-							v-if="user?.editable?.mail"
+							v-if="user?.editable?.groups"
 							@click="editGroups"
 						>
 							<btn type="solid gray-brand">
@@ -231,6 +171,82 @@ const
 		</container>
 	</container>
 </template>
+
+<script>
+import { router } from '@/router';
+import { $, select } from '@CC/WinStack.vue';
+import createApi from '@CL/api';
+import useUserStore from '@CS/user';
+import { defineComponent, defineProps, ref } from 'vue'
+import Settings from './settings/settings.vue'
+import EditAvatar from './settings/edit-avatar.vue'
+export default defineComponent({
+	props: { userID: String },
+	setup(props) {
+		const
+			{ userID } = props,
+			localUser = useUserStore(),
+			user = ref({
+				name: undefined,
+				mail: undefined,
+				groups: undefined
+			}),
+			userProfile = ref({
+				institution: undefined,
+			}),
+			settings = () => $('偏好设置', Settings),
+			editAvatar = () => $('编辑头像', EditAvatar, {}, user.userID),
+			loadGroups = createApi('/groups'),
+			updateGroups = createApi(`/user/${userID}/groups`),
+			editGroups = async () => {
+				const currentGroups = user.value.groups?.map(({id}) => id) || []
+				select(
+					`设置 ${user.name || userID} 的用户组`,
+					loadGroups()
+						.then(res => res.json())
+						.then(l => l.map(({ id, name }) => [
+							id,
+							name,
+							currentGroups.includes(id)
+						])),
+					{
+						async hook(arr) {
+							updateGroups({
+								add: arr.filter(id => !currentGroups.includes(id)),
+								sub: currentGroups.filter(id => !arr.includes(id))
+							}).then(() => location.href = location.href)
+						}
+					}
+				)
+			}
+		return {
+			userID,
+			localUser,
+			user,
+			userProfile,
+			editGroups,
+			settings,
+			editAvatar,
+			loadGroups,
+			updateGroups,
+			editGroups,
+		}
+	},
+	async mounted()  {
+		const
+			loadUserInfo = createApi(`/user/${this.userID}/`),
+			data = await loadUserInfo().then(async res => {
+				if (res.ok) return res.json()
+				else router.push(router.resolve(`/${
+					res.status
+				}?${
+					await res.text()
+				}`))
+			});
+		Object.assign(this.user, data || {})
+	}
+})
+</script>
 
 <style lang="scss" scoped>
 h3 {

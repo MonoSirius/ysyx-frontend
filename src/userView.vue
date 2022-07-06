@@ -5,5 +5,5 @@ const route = useRoute()
 </script>
 
 <template>
-	<user :key="route.params.userID" />
+	<user :key="route.params.userID" :userID="route.params.userID" />
 </template>
