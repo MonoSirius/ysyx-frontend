@@ -86,13 +86,16 @@ onMounted(loadUserInfo)
 				</div>
 			</div>
 			<div actions>
+				<btn type="solid gray-brand"
+					><i class="fas fa-list"></i
+				></btn>
 				<btn
 					type="solid gray-brand"
 					v-if="user.editable.groups"
 					@click="editGroups"
 					><i class="fa fa-users"></i
 				></btn>
-				<btn type="solid gray-brand" @click="showUserHome"
+				<btn type="seamless brand" @click="showUserHome"
 					><i class="fa fa-arrow-right"></i
 				></btn>
 			</div>
