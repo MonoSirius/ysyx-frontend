@@ -26,6 +26,7 @@ function activeBox() {
 
 <template>
 	<div
+		sponsor-box
 		:style="{ '--scale': scale }"
 		tabindex="-1"
 		:ref="(_) => (box = _)"
@@ -49,33 +50,31 @@ html.dark svg .clx {
 }
 </style>
 
-<style scoped>
-div {
+<style lang="scss" scoped>
+[sponsor-box] {
 	display: flex;
 	align-items: center;
 	justify-content: space-evenly;
 	padding: 1em;
 	overflow: visible;
-	filter: saturate(0) contrast(50%);
-}
-
-div:hover,
-div:focus {
-	filter: none;
-	background-color: var(--cf-next-level);
-}
-
-@media (min-width: 720px) {
-	div {
-		width: 360px;
-		height: 120px;
+	&:hover,
+	&:focus {
+		background-color: var(--cf-next-level);
 	}
-}
 
-@media (max-width: 719px) {
-	div {
-		width: 100%;
-		height: 24vw;
+	@media (min-width: 720px) {
+		& {
+			width: 360px;
+			height: 120px;
+		}
+	}
+
+	@media (max-width: 719px) {
+		& {
+			width: 100%;
+			max-width: 360px;
+			height: 24vw;
+		}
 	}
 }
 </style>
