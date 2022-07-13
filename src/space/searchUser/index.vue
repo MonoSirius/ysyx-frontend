@@ -1,5 +1,5 @@
 <template>
-	<container frame-content>
+	<container frame-content style="min-width: 40vw">
 		<v-form>
 			<label>User ID (逗号分隔)</label>
 			<container
