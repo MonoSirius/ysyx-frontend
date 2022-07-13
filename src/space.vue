@@ -17,7 +17,10 @@ const searchForm = () => $('搜索申请表', Groups)
 // Guard this path for logged in visitors only
 guard()
 const user = useUserStore(),
-	route = useRoute()
+	route = useRoute(),
+	alert = (...args) => window.alert(...args),
+	{ protocol, host } = location,
+	oscc = [protocol, host.replace(/^ysyx\./i, '')].join('//')
 </script>
 
 <template>
@@ -170,6 +173,46 @@ const user = useUserStore(),
 				</container>
 			</container>
 		</container>
+		<span
+			style="
+				width: 100%;
+				padding: 1em 0;
+				color: var(--ct-gray-light);
+				text-align: center;
+				line-height: 200%;
+				user-select: none;
+			"
+			@click.meta.shift="(e) => alert('hello')"
+		>
+			<b
+				><locale-name
+					:name="{
+						zh: '一生一芯团队',
+						en: 'YSYX Project Team',
+					}" /></b
+			><br />
+			<a
+				:href="oscc"
+				style="
+					font-size: 0.8em;
+					text-decoration: none;
+					color: inherit;
+					font-weight: bold;
+					display: inline-block;
+					padding: 0 0.5em;
+					border: 1px solid var(--cb-gray-light);
+					border-radius: 5px;
+				"
+				>OSCC</a
+			>
+			-
+			<locale-name
+				:name="{
+					zh: '开源芯片社区',
+					en: 'Open Source Chip Platform',
+				}"
+			/>
+		</span>
 	</container>
 </template>
 
