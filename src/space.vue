@@ -1,6 +1,5 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import ReportGraph from './space/reportGraph.vue'
 import useUserStore from '@CS/user'
 import guard from '@CL/guard'
 import { router } from '@/router'
@@ -8,6 +7,8 @@ import { router } from '@/router'
 import { $, ProgressReport as PR } from '@CC/WinStack.vue'
 import Groups from './space/groups/index.vue'
 import SearchUser from './space/searchUser/index.vue'
+import ReportGraph from './space/reportGraph.vue'
+import ApplicationForm from './form/brief.vue'
 // Window component callback declaration
 const groups = () => $('用户组管理', Groups)
 const notice = () => $('公告管理', Groups)
@@ -24,7 +25,7 @@ const user = useUserStore(),
 </script>
 
 <template>
-	<container flex-column flex-start flex-grow content-h-fill content-left>
+	<container w1280 flex-column flex-start flex-grow content-h-fill content-left>
 		<container style="padding-left: 0; padding-right: 0">
 			<h2>个人空间</h2>
 		</container>
