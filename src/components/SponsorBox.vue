@@ -74,6 +74,7 @@ html.dark svg .clx {
 			width: 100%;
 			max-width: 360px;
 			height: 24vw;
+			max-height: 120px;
 		}
 	}
 }
