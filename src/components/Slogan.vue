@@ -2,7 +2,7 @@
 </script>
 
 <template>
-	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1112.2 464.67">
+	<svg xmlns="http://www.w3.org/2000/svg" :viewBox="[-580, 0, 1112.2 + 580, 464.67].join(' ')">
 		<linearGradient
 			id="grad"
 			x1="0%"
@@ -14,6 +14,7 @@
 			<stop offset="10%" stop-color="hsl(262, 40%, 50%)" />
 			<stop offset="90%" stop-color="hsl(212, 60%, 45%)" />
 		</linearGradient>
+		<image class="slogan-logo" href="@CR/logo/square.png" x="-580" y="0" width="505" height="464"/>
 		<g id="Layer_2" data-name="Layer 2">
 			<g id="Layer_1-2" data-name="Layer 1">
 				<rect
@@ -111,7 +112,7 @@
 svg {
 	max-height: 16rem;
 	flex-grow: 1;
-	margin: 2rem 0 1rem 0;
+	margin: 3rem 0 2rem 0;
 }
 .RISC-V-Blue {
 	fill: #283272;
@@ -124,5 +125,12 @@ html.dark .RISC-V-Blue {
 }
 .Slogan-Text {
 	fill: url(#grad);
+}
+/* Dark theme saturates the logo */
+html.light .slogan-logo {
+	filter: contrast(1.0) brightness(100%);
+}
+html.dark .slogan-logo {
+	filter: contrast(0.8) brightness(120%);
 }
 </style>
