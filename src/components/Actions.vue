@@ -16,7 +16,7 @@
 	</div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .actions {
 	width: 100%;
 	max-width: 42em;
@@ -30,5 +30,8 @@
 	font-size: 16px;
 	flex-grow: 1;
 	max-width: 8em;
+	@media (min-width: 720px) {
+		font-size: 1.2em;
+	}
 }
 </style>
