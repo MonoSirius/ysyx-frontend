@@ -116,7 +116,7 @@ svg {
 		margin: 3rem 5vw 2rem 5vw;
 	}
 	@media (max-width: 719px) {
-		margin: 2rem 2vw 1rem 2vw;
+		margin: 2rem 0 1rem 0;
 	}
 }
 .RISC-V-Blue {

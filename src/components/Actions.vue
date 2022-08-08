@@ -22,17 +22,16 @@
 	max-width: 42em;
 	display: flex;
 	flex-direction: row;
-	flex-wrap: wrap;
 	justify-content: space-evenly;
 	margin: 1rem 0;
-}
-.actions > * {
-	margin: 0.5rem;
-	font-size: 16px;
-	flex-grow: 1;
-	max-width: 8em;
-	@media (min-width: 720px) {
-		font-size: 1.2em;
+	& > * {
+		margin: 0.5rem;
+		font-size: 16px;
+		flex-grow: 1;
+		max-width: 8em;
+		@media (min-width: 720px) {
+			font-size: 1.2em;
+		}
 	}
 }
 </style>
