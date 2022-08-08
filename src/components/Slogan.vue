@@ -108,11 +108,16 @@
 	</svg>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 svg {
 	max-height: 16rem;
 	flex-grow: 1;
-	margin: 3rem 0 2rem 0;
+	@media (min-width: 720px) {
+		margin: 3rem 0 2rem 0;
+	}
+	@media (max-width: 719px) {
+		margin: 2rem 0 1rem 0;
+	}
 }
 .RISC-V-Blue {
 	fill: #283272;

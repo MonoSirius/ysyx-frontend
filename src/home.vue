@@ -5,7 +5,7 @@ import Sponsors from './components/Sponsors.vue'
 </script>
 
 <template>
-	<container flex-column flex-center content-center>
+	<container flex-column flex-center content-center flex-grow>
 		<Slogan />
 		<Actions />
 	</container>
