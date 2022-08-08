@@ -32,12 +32,12 @@ router.beforeResolve((to, from, next) => {
       <ColorSchemeSwitch style="margin-right: 8px" />
     </template>
     <template #nav>
-      <nav-link to="/" title="主页"><i class="fa fa-home"></i>主页 </nav-link>
+      <nav-link to="/" title="主页"><i class="fa fa-home"></i>主页</nav-link>
       <nav-link to="/post" title="公告列表"
         ><i class="fa fa-bullhorn"></i>公告
       </nav-link>
-      <nav-link to="/redirect/docs/" title="项目资料">项目资料</nav-link>
-      <nav-link to="/redirect/forum/" title="讨论区">讨论区</nav-link>
+      <nav-link to="/redirect/docs/" title="文档"><i class="fa fa-book"></i> 文档</nav-link>
+      <nav-link to="/redirect/forum/" title="讨论区"><i class="fa fa-comments"></i> 讨论区</nav-link>
       <nav-link
         to="/redirect/to/docs.qq.com/sheet/DT29weHpIRWNnYlFl?tab=BB08J2"
         title="学习记录"
@@ -63,7 +63,6 @@ router.beforeResolve((to, from, next) => {
 
 <style scoped>
 /* Header elements layout */
-
 .logo {
   height: 1.2em;
 }
