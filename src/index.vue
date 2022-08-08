@@ -1,7 +1,6 @@
 <script setup>
 import WinStack from "@CC/WinStack.vue";
 import useUserStore from "@CS/user";
-import { useNavStore } from "@CS/nav";
 import NavLink from "@CC/header/NavLink.vue";
 import UserBadge from "@CC/header/UserBadge.vue";
 import ColorSchemeSwitch from "@CC/header/ColorSchemeSwitch.vue";
@@ -10,8 +9,6 @@ import { router } from "../router";
 import { ref } from "vue";
 const loading = ref(false);
 const user = useUserStore();
-const nav = useNavStore();
-const { redirecting, activeTitle } = nav;
 user.update();
 setInterval(() => {
   if (user.loginState) user.update();
@@ -35,70 +32,27 @@ router.beforeResolve((to, from, next) => {
       <ColorSchemeSwitch style="margin-right: 8px" />
     </template>
     <template #nav>
-      <nav-link
-        :disabled="redirecting"
-        @active="activeTitle"
-        to="/"
-        title="主页"
-        ><i class="fa fa-home"></i>主页
-      </nav-link>
-      <nav-link
-        :disabled="redirecting"
-        @active="activeTitle"
-        to="/post"
-        title="公告列表"
+      <nav-link to="/" title="主页"><i class="fa fa-home"></i>主页 </nav-link>
+      <nav-link to="/post" title="公告列表"
         ><i class="fa fa-bullhorn"></i>公告
       </nav-link>
+      <nav-link to="/redirect/docs/" title="项目资料">项目资料</nav-link>
+      <nav-link to="/redirect/forum/" title="讨论区">讨论区</nav-link>
       <nav-link
-        :disabled="redirecting"
-        @active="activeTitle"
-        to="/redirect/docs/"
-        title="项目资料"
-        >项目资料</nav-link
-      >
-      <nav-link
-        :disabled="redirecting"
-        @active="activeTitle"
-        to="/redirect/forum/"
-        title="讨论区"
-        >讨论区</nav-link
-      >
-      <nav-link
-        :disabled="redirecting"
-        @active="activeTitle"
         to="/redirect/to/docs.qq.com/sheet/DT29weHpIRWNnYlFl?tab=BB08J2"
         title="学习记录"
         ><i class="fa fa-link"></i>学习记录
       </nav-link>
-      <nav-link
-        :disabled="redirecting"
-        @active="activeTitle"
-        v-if="!user.loginState"
-        to="/register"
-        title="注册"
+      <nav-link v-if="!user.loginState" to="/register" title="注册"
         >注册
       </nav-link>
-      <nav-link
-        :disabled="redirecting"
-        @active="activeTitle"
-        v-if="!user.loginState"
-        to="/login"
-        title="登录"
+      <nav-link v-if="!user.loginState" to="/login" title="登录"
         >登录
       </nav-link>
-      <nav-link
-        :disabled="redirecting"
-        @active="activeTitle"
-        v-if="user.loginState"
-        to="/space"
-        title="个人空间"
+      <nav-link v-if="user.loginState" to="/space" title="个人空间"
         >个人空间
       </nav-link>
-      <user-badge
-        :disabled="redirecting"
-        @active="activeTitle"
-        v-if="user.loginState"
-      />
+      <user-badge v-if="user.loginState" />
     </template>
   </v-header>
   <WinStack />
