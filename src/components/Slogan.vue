@@ -113,10 +113,10 @@ svg {
 	max-height: 16rem;
 	flex-grow: 1;
 	@media (min-width: 720px) {
-		margin: 3rem 0 2rem 0;
+		margin: 3rem 5vw 2rem 5vw;
 	}
 	@media (max-width: 719px) {
-		margin: 2rem 0 1rem 0;
+		margin: 2rem 2vw 1rem 2vw;
 	}
 }
 .RISC-V-Blue {

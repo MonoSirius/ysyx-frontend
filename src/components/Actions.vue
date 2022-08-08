@@ -22,6 +22,7 @@
 	max-width: 42em;
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	justify-content: space-evenly;
 	margin: 1rem 0;
 }
