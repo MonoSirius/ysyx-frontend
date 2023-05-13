@@ -9,7 +9,7 @@ import Groups from './space/groups/index.vue'
 import SearchUser from './space/searchUser/index.vue'
 import ReportGraph from './space/reportGraph.vue'
 import ApplicationForm from './form/brief.vue'
-// Window component callback declaration
+// Window component callback declaration 
 const groups = () => $('用户组管理', Groups)
 const notice = () => $('公告管理', Groups)
 const searchUser = () => $('搜索用户', SearchUser)

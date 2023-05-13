@@ -45,6 +45,14 @@ export const routes = [{
 		title: to => `${/^\d+$/g.test(to.params.code) && to.params.code || '404'} | 一生一芯计划`
 	},
 	component: () => import('./src/status.vue')
+}, {
+	path: '/post/detail',
+	meta: { title: '通知详情 | 一生一芯计划' },
+	component: () => import('./src/post/postDetail.vue')
+}, {
+	path: '/forum',
+	meta: { title: '讨论区 | 一生一芯计划' },
+	component: () => import('./src/forum.vue')
 }]
 
 export const router = createRouter({

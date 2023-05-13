@@ -10,9 +10,11 @@
     "stat": "cloc --exclude-dir=node_modules,var --exclude-ext=svg,json ."
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^6.1.0",
     "@chenfengyuan/vue-countdown": "^2.0.0",
     "@highlightjs/vue-plugin": "^2.1.0",
     "@vitejs/plugin-vue": "^2.3.1",
+    "ant-design-vue": "^3.3.0-beta.4",
     "colors": "^1.4.0",
     "diff": "^5.0.0",
     "eslint": "^8.10.0",
@@ -24,9 +26,14 @@
     "sass": "^1.49.9",
     "vite": "^2.8.0",
     "vite-plugin-pwa": "^0.11.13",
-    "vue": "^3.2.25",
+    "vue": "^3.2.47",
     "vue-avatar-editor-improved": "^1.0.7",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "vue-server-renderer": "^2.7.14"
   },
-  "deploy": "home"
+  "deploy": "home",
+  "devDependencies": {
+    "unplugin-vue-components": "^0.24.1",
+    "vuepress": "^1.9.9"
+  }
 }
